@@ -61,7 +61,7 @@ def scan(file_contents):
                     token = "GREATER"
             case "/":
                 next = index + 1
-                if file_contents[next] == "/":
+                if next < len(file_contents) and file_contents[next] == "/":
                     while next < len(file_contents) and file_contents[next] != "/n":
                         next += 1
                     index = next
