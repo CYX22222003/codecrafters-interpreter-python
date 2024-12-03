@@ -68,7 +68,7 @@ def scan(file_contents):
                     shouldPrint = False
                 else:
                     token = "SLASH"
-            case "\t" | "\r" | " " | "\n":
+            case "\t" | "\r" | " " :
                 shouldPrint = False
             case _:
                 error = True
