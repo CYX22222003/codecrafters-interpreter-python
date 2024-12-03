@@ -37,10 +37,10 @@ def scan(file_contents):
             case _:
                 error = True
                 line_number = (
-                    file_contents.count("\n", 0, file_contents.find(token)) + 1
+                    file_contents.count("\n", 0, file_contents.find(char)) + 1
                 )
                 print(
-                    f"[line {line_number}] Error: Unexpected character: {token}",
+                    f"[line {line_number}] Error: Unexpected character: {char}",
                     file=sys.stderr,
                 )
         print(f"{token} {char} null")
