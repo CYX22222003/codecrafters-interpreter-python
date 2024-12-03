@@ -78,7 +78,6 @@ def scan(file_contents):
                 while next < len(file_contents):
                     char += file_contents[next]
                     if file_contents[next] == '"':
-                        next += 1
                         isClose = True
                         break
                     next += 1
