@@ -74,13 +74,17 @@ def scan(file_contents):
 
             case '"':
                 next = index + 1
-                while next < len(file_contents) and file_contents[next] != '"':
+                isClose = False
+                while next < len(file_contents):
                     char += file_contents[next]
+                    if file_contents[next] == '"':
+                        next += 1
+                        isClose = True
+                        break
                     next += 1
-                
-                char += file_contents[next]
+ 
                 index = next
-                if index >= len(file_contents) or file_contents[index] != '"':
+                if not isClose:
                     error = True
                     shouldPrint = False
                     line_number = (
