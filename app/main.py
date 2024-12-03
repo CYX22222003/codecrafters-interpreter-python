@@ -16,24 +16,33 @@ def main():
     with open(filename) as file:
         file_contents = file.read()
 
-    for c in file_contents:
-        if c == "(":
-            print("LEFT_PAREN ( null")
-        if c == ")":
-            print("RIGHT_PAREN ) null")
-        if c == "{":
-            print("LEFT_BRACE { null")
-        if c == "}":
-            print("RIGHT_BRACE } null")
-        if c == "*":
-            print("STAR * null")
-        if c == ".":
-            print("DOT . null")
-        if c == ",":
-            print("COMMA , null")
-        if c == "+":
-            print("PLUS + null")
-        
+    for line in file_contents:
+            for char in line:
+                match char:
+                    case "(":
+                        token = "LEFT_PAREN"
+                    case ")":
+                        token = "RIGHT_PAREN"
+                    case "{":
+                        token = "LEFT_BRACE"
+                    case "}":
+                        token = "RIGHT_BRACE"
+                    case ",":
+                        token = "COMMA"
+                    case ".":
+                        token = "DOT"
+                    case "-":
+                        token = "MINUS"
+                    case "+":
+                        token = "PLUS"
+                    case ";":
+                        token = "SEMICOLON"
+                    case "*":
+                        token = "STAR"
+                    case _:
+                        continue
+                        # token = ""
+                print(f"{token} {char} null")
     print("EOF  null")
 
 
