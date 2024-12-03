@@ -59,6 +59,15 @@ def scan(file_contents):
                     index = next
                 else:
                     token = "GREATER"
+            case "/":
+                next = index + 1
+                if next == "/":
+                    while next < len(file_contents) and next != "/n":
+                        next += 1
+                    index = next
+                    shouldPrint = False
+                else:
+                    token = "SLASH"
             case _:
                 error = True
                 shouldPrint = False
