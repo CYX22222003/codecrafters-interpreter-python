@@ -80,7 +80,7 @@ def scan(file_contents):
                 
                 char += file_contents[next]
                 index = next
-                if file_contents[index] != '"':
+                if index >= len(file_contents) or file_contents[index] != '"':
                     error = True
                     shouldPrint = False
                     line_number = (
