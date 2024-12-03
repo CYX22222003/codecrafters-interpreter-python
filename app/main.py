@@ -92,7 +92,7 @@ def scan(file_contents):
                     )
                 else:
                     token = "STRING"
-                    literal = char.split('"')[0]
+                    literal = char.split('"')[1]
             
             case _:
                 error = True
