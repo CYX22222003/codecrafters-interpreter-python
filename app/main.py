@@ -2,7 +2,9 @@ import sys
 
 def scan(file_contents):
     error = False
-    for char in file_contents:
+    index = 0
+    while index < len(file_contents):
+        char = file_contents[index]
         shouldPrint = True
         match char:
             case "(":
@@ -25,6 +27,34 @@ def scan(file_contents):
                 token = "SEMICOLON"
             case "*":
                 token = "STAR"
+            case "!":
+                next = index + 1
+                if next < len(file_contents) and file_contents[next] == "=":
+                    token = "BANG_EQUAL"
+                    index = next
+                else:
+                    token = "BANG"
+            case "=":
+                next = index + 1
+                if next < len(file_contents) and file_contents[next] == "=":
+                    token = "EQUAL_EQUAL"
+                    index = next
+                else:
+                    token = "EQUAL"
+            case "<":
+                next = index + 1
+                if next < len(file_contents) and file_contents[next] == "=":
+                    token = "LESS_EQUAL"
+                    index = next
+                else:
+                    token = "LESS"
+            case ">":
+                next = index + 1
+                if next < len(file_contents) and file_contents[next] == "=":
+                    token = "GREATER_EQUAL"
+                    index = next
+                else:
+                    token = "GREATER"
             case _:
                 error = True
                 shouldPrint = False
@@ -35,8 +65,11 @@ def scan(file_contents):
                     f"[line {line_number}] Error: Unexpected character: {char}",
                     file=sys.stderr,
                 )
+        
         if shouldPrint:
             print(f"{token} {char} null")
+        
+        index += 1
     print("EOF  null")
     return error
 
