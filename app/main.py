@@ -3,7 +3,7 @@ import sys
 def scan(file_contents):
     error = False
     for char in file_contents:
-        error = False
+        shouldPrint = True
         match char:
             case "(":
                 token = "LEFT_PAREN"
@@ -27,6 +27,7 @@ def scan(file_contents):
                 token = "STAR"
             case _:
                 error = True
+                shouldPrint = False
                 line_number = (
                     file_contents.count("\n", 0, file_contents.find(char)) + 1
                 )
@@ -34,7 +35,7 @@ def scan(file_contents):
                     f"[line {line_number}] Error: Unexpected character: {char}",
                     file=sys.stderr,
                 )
-        if not error:
+        if shouldPrint:
             print(f"{token} {char} null")
     print("EOF  null")
     return error
