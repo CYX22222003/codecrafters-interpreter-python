@@ -6,34 +6,24 @@ def scan(file_contents):
         match char:
             case "(":
                 token = "LEFT_PAREN"
-                print(f"{token} {char} null")
             case ")":
                 token = "RIGHT_PAREN"
-                print(f"{token} {char} null")
             case "{":
                 token = "LEFT_BRACE"
-                print(f"{token} {char} null")
             case "}":
                 token = "RIGHT_BRACE"
-                print(f"{token} {char} null")
             case ",":
                 token = "COMMA"
-                print(f"{token} {char} null")
             case ".":
                 token = "DOT"
-                print(f"{token} {char} null")
             case "-":
                 token = "MINUS"
-                print(f"{token} {char} null")
             case "+":
                 token = "PLUS"
-                print(f"{token} {char} null")
             case ";":
                 token = "SEMICOLON"
-                print(f"{token} {char} null")
             case "*":
                 token = "STAR"
-                print(f"{token} {char} null")
             case _:
                 error = True
                 line_number = (
@@ -43,6 +33,8 @@ def scan(file_contents):
                     f"[line {line_number}] Error: Unexpected character: {char}",
                     file=sys.stderr,
                 )
+        if not error:
+            print(f"{token} {char} null")
     print("EOF  null")
     return error
 
