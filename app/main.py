@@ -21,6 +21,10 @@ def main():
             print("LEFT_PAREN ( null")
         if c == ")":
             print("RIGHT_PAREN ) null")
+        if c == "{":
+            print("LEFT_BRACE { null")
+        if c == "}":
+            print("RIGHT_BRACE } null")
     print("EOF  null")
 
 
