@@ -62,7 +62,7 @@ def scan(file_contents):
             case "/":
                 next = index + 1
                 if file_contents[next] == "/":
-                    while next < len(file_contents) and next != "/n":
+                    while next < len(file_contents) and file_contents[next] != "/n":
                         next += 1
                     index = next
                     shouldPrint = False
