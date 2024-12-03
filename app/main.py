@@ -64,7 +64,7 @@ def scan(file_contents):
                 if file_contents[next] == "/":
                     while next < len(file_contents) and next != "/n":
                         next += 1
-                    index = next + 1
+                    index = next
                     shouldPrint = False
                 else:
                     token = "SLASH"
