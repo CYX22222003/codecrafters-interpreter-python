@@ -77,6 +77,8 @@ def scan(file_contents):
                 while next < len(file_contents) and file_contents[next] != '"':
                     char += file_contents[next]
                     next += 1
+                
+                char += file_contents[next]
                 index = next
                 if file_contents[index] != '"':
                     error = True
@@ -91,6 +93,7 @@ def scan(file_contents):
                 else:
                     token = "STRING"
                     literal = char
+            
             case _:
                 error = True
                 shouldPrint = False
