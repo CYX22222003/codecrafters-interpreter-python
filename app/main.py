@@ -74,7 +74,7 @@ def scan(file_contents):
                 error = True
                 shouldPrint = False
                 line_number = (
-                    file_contents.count("\n", 0, file_contents.find(char)) + 1
+                    file_contents.count("\n", 0, index) + 1
                 )
                 print(
                     f"[line {line_number}] Error: Unexpected character: {char}",
