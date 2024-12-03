@@ -1,5 +1,51 @@
 import sys
 
+def scan(file_contents):
+    error = False
+    for char in file_contents:
+        match char:
+            case "(":
+                token = "LEFT_PAREN"
+                print(f"{token} {char} null")
+            case ")":
+                token = "RIGHT_PAREN"
+                print(f"{token} {char} null")
+            case "{":
+                token = "LEFT_BRACE"
+                print(f"{token} {char} null")
+            case "}":
+                token = "RIGHT_BRACE"
+                print(f"{token} {char} null")
+            case ",":
+                token = "COMMA"
+                print(f"{token} {char} null")
+            case ".":
+                token = "DOT"
+                print(f"{token} {char} null")
+            case "-":
+                token = "MINUS"
+                print(f"{token} {char} null")
+            case "+":
+                token = "PLUS"
+                print(f"{token} {char} null")
+            case ";":
+                token = "SEMICOLON"
+                print(f"{token} {char} null")
+            case "*":
+                token = "STAR"
+                print(f"{token} {char} null")
+            case _:
+                error = True
+                line_number = (
+                    file_contents.count("\n", 0, file_contents.find(token)) + 1
+                )
+                print(
+                    f"[line {line_number}] Error: Unexpected character: {token}",
+                    file=sys.stderr,
+                )
+        print(f"{token} {char} null")
+    print("EOF  null")
+    return error
 
 def main(): 
     if len(sys.argv) < 3:
@@ -16,35 +62,9 @@ def main():
     with open(filename) as file:
         file_contents = file.read()
 
-    for line in file_contents:
-            for char in line:
-                match char:
-                    case "(":
-                        token = "LEFT_PAREN"
-                    case ")":
-                        token = "RIGHT_PAREN"
-                    case "{":
-                        token = "LEFT_BRACE"
-                    case "}":
-                        token = "RIGHT_BRACE"
-                    case ",":
-                        token = "COMMA"
-                    case ".":
-                        token = "DOT"
-                    case "-":
-                        token = "MINUS"
-                    case "+":
-                        token = "PLUS"
-                    case ";":
-                        token = "SEMICOLON"
-                    case "*":
-                        token = "STAR"
-                    case _:
-                        continue
-                        # token = ""
-                print(f"{token} {char} null")
-    print("EOF  null")
-
+    error = scan(file_contents=file_contents)
+    if error:
+        exit(65)
 
 if __name__ == "__main__":
     main()
