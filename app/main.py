@@ -6,6 +6,7 @@ def scan(file_contents):
     while index < len(file_contents):
         char = file_contents[index]
         shouldPrint = True
+        literal = "null"
         match char:
             case "(":
                 token = "LEFT_PAREN"
@@ -70,6 +71,26 @@ def scan(file_contents):
                     token = "SLASH"
             case "\t" | " " | "\n":
                 shouldPrint = False
+
+            case '"':
+                next = index + 1
+                while next < len(file_contents) and file_contents[next] != '"':
+                    char += file_contents[next]
+                    next += 1
+                index = next
+                if file_contents[index] != '"':
+                    error = True
+                    shouldPrint = False
+                    line_number = (
+                        file_contents.count("\n", 0, index) + 1
+                    )
+                    print(
+                        f"[line {line_number}] Error: Unterminated string.",
+                        file=sys.stderr,
+                    )
+                else:
+                    token = "STRING"
+                    literal = char
             case _:
                 error = True
                 shouldPrint = False
@@ -82,7 +103,7 @@ def scan(file_contents):
                 )
         
         if shouldPrint:
-            print(f"{token} {char} null")
+            print(f"{token} {char} {literal}")
         
         index += 1
     print("EOF  null")
