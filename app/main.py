@@ -3,6 +3,7 @@ import sys
 def scan(file_contents):
     error = False
     for char in file_contents:
+        error = False
         match char:
             case "(":
                 token = "LEFT_PAREN"
