@@ -31,6 +31,7 @@ def scan(file_contents):
                 next = index + 1
                 if next < len(file_contents) and file_contents[next] == "=":
                     token = "BANG_EQUAL"
+                    char = "!="
                     index = next
                 else:
                     token = "BANG"
@@ -38,6 +39,7 @@ def scan(file_contents):
                 next = index + 1
                 if next < len(file_contents) and file_contents[next] == "=":
                     token = "EQUAL_EQUAL"
+                    char = "=="
                     index = next
                 else:
                     token = "EQUAL"
@@ -45,6 +47,7 @@ def scan(file_contents):
                 next = index + 1
                 if next < len(file_contents) and file_contents[next] == "=":
                     token = "LESS_EQUAL"
+                    char = "<="
                     index = next
                 else:
                     token = "LESS"
@@ -52,6 +55,7 @@ def scan(file_contents):
                 next = index + 1
                 if next < len(file_contents) and file_contents[next] == "=":
                     token = "GREATER_EQUAL"
+                    char = ">="
                     index = next
                 else:
                     token = "GREATER"
