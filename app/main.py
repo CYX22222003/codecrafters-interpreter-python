@@ -43,7 +43,6 @@ def scan(file_contents):
                     f"[line {line_number}] Error: Unexpected character: {char}",
                     file=sys.stderr,
                 )
-        print(f"{token} {char} null")
     print("EOF  null")
     return error
 
