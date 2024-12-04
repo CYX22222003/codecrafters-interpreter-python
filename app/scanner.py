@@ -36,6 +36,8 @@ class Scanner:
             self.processString(char)
         elif char.isdigit():
             self.processNumber(char)
+        elif char.isalpha():
+            self.processAlpha(char)
         else:
             self.errorStatus = True
             self.generateErrorMsg(char)
@@ -169,4 +171,14 @@ class Scanner:
         token = "NUMBER"
         literal = float(char)
 
+        self.printAndAddToken(token, char, literal)
+        
+    def processAlpha(self, char):
+        self.pointer += 1
+        while (not self.isAtEnd()) and self.source[self.pointer].isalnum():
+            char += self.source[self.pointer]
+            self.pointer += 1
+            
+        token = "IDENTIFIER"
+        literal = "null"
         self.printAndAddToken(token, char, literal)
