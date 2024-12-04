@@ -3,6 +3,25 @@ import sys
 
 
 class Scanner:
+    reserved_words = {
+        "and",
+        "class",
+        "else",
+        "false",
+        "for",
+        "fun",
+        "if",
+        "nil",
+        "or",
+        "print",
+        "return",
+        "super",
+        "this",
+        "true",
+        "var",
+        "while",
+    }
+
     def __init__(self, source):
         self.source = source
         self.tokens = []
@@ -162,7 +181,7 @@ class Scanner:
         if self.pointer < len(self.source) and self.source[self.pointer] == ".":
             char += self.source[self.pointer]
             self.pointer += 1
-        
+
         while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
             char += self.source[self.pointer]
             self.pointer += 1
@@ -172,22 +191,32 @@ class Scanner:
         literal = float(char)
 
         self.printAndAddToken(token, char, literal)
-        
+
     def processAlpha(self, char):
         self.pointer += 1
-        while (not self.isAtEnd()) and Scanner.isValidIdentifierBody(self.source[self.pointer]):
+        while (not self.isAtEnd()) and Scanner.isValidIdentifierBody(
+            self.source[self.pointer]
+        ):
             char += self.source[self.pointer]
             self.pointer += 1
-        
+
         self.pointer -= 1
-        token = "IDENTIFIER"
-        literal = "null"
+        if Scanner.isReservedWord(char):
+            token = char.upper()
+            literal = "null"
+        else:
+            token = "IDENTIFIER"
+            literal = "null"
         self.printAndAddToken(token, char, literal)
-        
+
     @staticmethod
     def isValidIdentifierStart(char):
         return char == "_" or char.isalpha()
-    
+
     @staticmethod
     def isValidIdentifierBody(char):
         return char == "_" or char.isalnum()
+
+    @staticmethod
+    def isReservedWord(word):
+        return word in Scanner.reserved_words
