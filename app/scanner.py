@@ -17,6 +17,7 @@ class Scanner:
         while not self.isAtEnd():
             self.scanToken()
         self.tokens.append(Token("EOF", "", "null"))
+        print(Token("EOF", "", "null"))
         return (self.tokens, self.errorStatus)
 
     def scanToken(self):
