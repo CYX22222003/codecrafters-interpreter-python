@@ -1,1 +1,8 @@
 var test = 123
+if (1 == 2) {
+    print "hello world"
+} 
+
+for (i = 0; i < 0; i+=1) {
+    doSomething()
+}

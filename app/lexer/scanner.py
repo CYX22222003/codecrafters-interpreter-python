@@ -1,6 +1,7 @@
 from app.lexer.token import Token
 from app.lexer.reserved_word import ReservedWord
 from app.lexer.token_types import TokenTypes
+from app.lexer.utils import isValidIdentifierBody, isValidIdentifierStart, isReservedWord
 import sys
 
 class Scanner:
@@ -35,7 +36,7 @@ class Scanner:
             self.processString(char)
         elif char.isdigit():
             self.processNumber(char)
-        elif Scanner.isValidIdentifierStart(char):
+        elif isValidIdentifierStart(char):
             self.processAlpha(char)
         else:
             self.errorStatus = True
@@ -174,14 +175,14 @@ class Scanner:
 
     def processAlpha(self, char):
         self.pointer += 1
-        while (not self.isAtEnd()) and Scanner.isValidIdentifierBody(
+        while (not self.isAtEnd()) and isValidIdentifierBody(
             self.source[self.pointer]
         ):
             char += self.source[self.pointer]
             self.pointer += 1
 
         self.pointer -= 1
-        if Scanner.isReservedWord(char):
+        if isReservedWord(char):
             token = ReservedWord.extractType(char)
             literal = "null"
         else:
@@ -192,14 +193,4 @@ class Scanner:
     def getTokens(self):
         return self.tokens
     
-    @staticmethod
-    def isValidIdentifierStart(char):
-        return char == "_" or char.isalpha()
 
-    @staticmethod
-    def isValidIdentifierBody(char):
-        return char == "_" or char.isalnum()
-
-    @staticmethod
-    def isReservedWord(word):
-        return ReservedWord.isReservedWord(word)
