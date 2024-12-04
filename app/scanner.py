@@ -110,6 +110,7 @@ class Scanner:
                 token = "STRING"
                 literal = char[1 : len(char) - 1]
         elif char.isdigit():
+            self.pointer += 1
             while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
                 char += self.source[self.pointer]
                 self.pointer += 1
