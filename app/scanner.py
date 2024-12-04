@@ -178,7 +178,8 @@ class Scanner:
         while (not self.isAtEnd()) and Scanner.isValidIdentifierBody(self.source[self.pointer]):
             char += self.source[self.pointer]
             self.pointer += 1
-            
+        
+        self.pointer -= 1
         token = "IDENTIFIER"
         literal = "null"
         self.printAndAddToken(token, char, literal)
