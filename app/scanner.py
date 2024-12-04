@@ -109,19 +109,20 @@ class Scanner:
             else:
                 token = "STRING"
                 literal = char[1 : len(char) - 1]
-        elif char.isDigit():
-            next = self.pointer + 1
-            while next < len(self.source) and self.source[next].isDigit():
-                char += self.source[next]
-                next += 1
+        elif char.isdigit():
+            while self.pointer < len(self.source) and self.source[next].isdigit():
+                char += self.source[self.pointer]
+                self.pointer += 1
 
-            if self.source[next] == ".":
-                char += self.source[next]
-                self.next += 1
+            if self.source[self.pointer] == ".":
+                char += self.source[self.pointer]
+                self.pointer += 1
 
-            while next < len(self.source) and self.source[next].isDigit():
-                char += self.source[next]
-                next += 1
+            while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
+                char += self.source[self.pointer]
+                self.pointer += 1
+            
+            self.pointer -= 1
             token = "NUMBER"
             literal = float(char)
         else:
