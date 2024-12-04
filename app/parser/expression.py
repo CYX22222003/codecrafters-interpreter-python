@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from app.token import Token
+from app.lexer.token import Token
 class Expression(ABC):
     @abstractmethod
     def form(self):

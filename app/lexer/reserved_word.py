@@ -1,4 +1,4 @@
-from app.token import TokenTypes
+from app.lexer.token import TokenTypes
 
 class ReservedWord:
     reserved_words = {

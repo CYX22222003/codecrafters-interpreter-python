@@ -1,4 +1,4 @@
-from app.token_types import TokenTypes
+from app.lexer.token_types import TokenTypes
 
 class Token:
     def __init__(self, type: TokenTypes, lexeme: str, literal: str):

@@ -1,6 +1,6 @@
-from app.token import Token
-from app.reserved_word import ReservedWord
-from app.token_types import TokenTypes
+from app.lexer.token import Token
+from app.lexer.reserved_word import ReservedWord
+from app.lexer.token_types import TokenTypes
 import sys
 
 class Scanner:

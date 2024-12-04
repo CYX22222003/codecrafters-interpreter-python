@@ -1,5 +1,5 @@
 import sys
-from app.scanner import Scanner
+from app.lexer.scanner import Scanner
 
 def scan(file_contents): 
     sc = Scanner(file_contents)
