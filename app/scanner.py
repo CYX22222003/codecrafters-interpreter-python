@@ -1,27 +1,9 @@
 from app.token import Token
+from app.reserved_word import ReservedWord
+from app.token_types import TokenTypes
 import sys
 
-
 class Scanner:
-    reserved_words = {
-        "and",
-        "class",
-        "else",
-        "false",
-        "for",
-        "fun",
-        "if",
-        "nil",
-        "or",
-        "print",
-        "return",
-        "super",
-        "this",
-        "true",
-        "var",
-        "while",
-    }
-
     def __init__(self, source):
         self.source = source
         self.tokens = []
@@ -36,13 +18,11 @@ class Scanner:
         while not self.isAtEnd():
             self.scanToken()
         self.tokens.append(Token("EOF", "", "null"))
-        print(Token("EOF", "", "null"))
+        print(Token(TokenTypes.EOF, "", "null"))
         return (self.tokens, self.errorStatus)
 
     def scanToken(self):
         char = self.source[self.pointer]
-        shouldPrint = True
-        literal = "null"
         if char in {"(", ")", "{", "}", ",", ".", "-", "+", ";", "*"}:
             self.processNormal(char)
         elif char in {"!", ">", "=", "<"}:
@@ -84,25 +64,25 @@ class Scanner:
     def processNormal(self, char):
         literal = "null"
         if char == "(":
-            token = "LEFT_PAREN"
+            token = TokenTypes.LEFT_PAREN
         elif char == ")":
-            token = "RIGHT_PAREN"
+            token = TokenTypes.RIGHT_PAREN
         elif char == "{":
-            token = "LEFT_BRACE"
+            token = TokenTypes.LEFT_BRACE
         elif char == "}":
-            token = "RIGHT_BRACE"
+            token = TokenTypes.RIGHT_BRACE
         elif char == ",":
-            token = "COMMA"
+            token = TokenTypes.COMMA
         elif char == ".":
-            token = "DOT"
+            token = TokenTypes.DOT
         elif char == "-":
-            token = "MINUS"
+            token = TokenTypes.MINUS
         elif char == "+":
-            token = "PLUS"
+            token = TokenTypes.PLUS
         elif char == ";":
-            token = "SEMICOLON"
+            token = TokenTypes.SEMICOLON
         elif char == "*":
-            token = "STAR"
+            token = TokenTypes.STAR
         self.printAndAddToken(token, char, literal)
 
     def processEquality(self, char):
@@ -110,35 +90,35 @@ class Scanner:
         if char == "!":
             next = self.pointer + 1
             if next < len(self.source) and self.source[next] == "=":
-                token = "BANG_EQUAL"
+                token = TokenTypes.BANG_EQUAL
                 char = "!="
                 self.pointer = next
             else:
-                token = "BANG"
+                token = TokenTypes.BANG
         elif char == "=":
             next = self.pointer + 1
             if next < len(self.source) and self.source[next] == "=":
-                token = "EQUAL_EQUAL"
+                token = TokenTypes.EQUAL_EQUAL
                 char = "=="
                 self.pointer = next
             else:
-                token = "EQUAL"
+                token = TokenTypes.EQUAL
         elif char == "<":
             next = self.pointer + 1
             if next < len(self.source) and self.source[next] == "=":
-                token = "LESS_EQUAL"
+                token = TokenTypes.LESS_EQUAL
                 char = "<="
                 self.pointer = next
             else:
-                token = "LESS"
+                token = TokenTypes.LESS
         elif char == ">":
             next = self.pointer + 1
             if next < len(self.source) and self.source[next] == "=":
-                token = "GREATER_EQUAL"
+                token = TokenTypes.GREATER_EQUAL
                 char = ">="
                 self.pointer = next
             else:
-                token = "GREATER"
+                token = TokenTypes.GREATER
 
         self.printAndAddToken(token, char, literal)
 
@@ -150,7 +130,7 @@ class Scanner:
                 next += 1
             self.pointer = next
         else:
-            token = "SLASH"
+            token = TokenTypes.SLASH
             self.printAndAddToken(token, char, literal)
 
     def processString(self, char):
@@ -168,7 +148,7 @@ class Scanner:
             self.errorStatus = True
             self.generateUnclosedString()
         else:
-            token = "STRING"
+            token = TokenTypes.STRING
             literal = char[1 : len(char) - 1]
             self.printAndAddToken(token, char, literal)
 
@@ -187,7 +167,7 @@ class Scanner:
             self.pointer += 1
 
         self.pointer -= 1
-        token = "NUMBER"
+        token = TokenTypes.NUMBER
         literal = float(char)
 
         self.printAndAddToken(token, char, literal)
@@ -202,13 +182,16 @@ class Scanner:
 
         self.pointer -= 1
         if Scanner.isReservedWord(char):
-            token = char.upper()
+            token = ReservedWord.extractType(char)
             literal = "null"
         else:
-            token = "IDENTIFIER"
+            token = TokenTypes.IDENTIFIER
             literal = "null"
         self.printAndAddToken(token, char, literal)
 
+    def getTokens(self):
+        return self.tokens
+    
     @staticmethod
     def isValidIdentifierStart(char):
         return char == "_" or char.isalpha()
@@ -219,4 +202,4 @@ class Scanner:
 
     @staticmethod
     def isReservedWord(word):
-        return word in Scanner.reserved_words
+        return ReservedWord.isReservedWord(word)
