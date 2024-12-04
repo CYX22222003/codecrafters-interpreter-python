@@ -57,11 +57,11 @@ class Parser:
     
     def primary(self):
         if self.match(TokenTypes.FALSE):
-            return Literal(False)
+            return Literal("false")
         elif self.match(TokenTypes.TRUE):
-            return Literal(True)
+            return Literal("true")
         elif self.match(TokenTypes.NIL):
-            return Literal(None)
+            return Literal("nil")
         
         elif self.match(TokenTypes.NUMBER, TokenTypes.STRING):
             return Literal(self.previous().literal)
