@@ -7,4 +7,4 @@ class Token:
         self.literal = literal
 
     def __str__(self):
-        return f"{self.type.value} {self.lexeme} {self.literal}"
+        return f"{self.type.name} {self.lexeme} {self.literal}"
