@@ -175,7 +175,7 @@ class Scanner:
         
     def processAlpha(self, char):
         self.pointer += 1
-        while (not self.isAtEnd()) and self.source[self.pointer].isalnum():
+        while (not self.isAtEnd()) and Scanner.isValidIdentifierBody(self.source[self.pointer]):
             char += self.source[self.pointer]
             self.pointer += 1
             
@@ -186,3 +186,7 @@ class Scanner:
     @staticmethod
     def isValidIdentifierStart(char):
         return char == "_" or char.isalpha()
+    
+    @staticmethod
+    def isValidIdentifierBody(char):
+        return char == "_" or char.isalnum()
