@@ -36,7 +36,7 @@ class Scanner:
             self.processString(char)
         elif char.isdigit():
             self.processNumber(char)
-        elif isValidIdentifierStart(char):
+        elif Scanner.isValidIdentifierStart(char):
             self.processAlpha(char)
         else:
             self.errorStatus = True
