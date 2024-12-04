@@ -5,12 +5,13 @@ from app.lexer.utils import isValidIdentifierBody, isValidIdentifierStart, isRes
 import sys
 
 class Scanner:
-    def __init__(self, source):
+    def __init__(self, source, shouldPrint = False):
         self.source = source
         self.tokens = []
         self.upper = len(source)
         self.pointer = 0
         self.errorStatus = False
+        self.shouldPrint = shouldPrint
 
     def isAtEnd(self):
         return self.pointer >= self.upper
@@ -19,7 +20,8 @@ class Scanner:
         while not self.isAtEnd():
             self.scanToken()
         self.tokens.append(Token("EOF", "", "null"))
-        # print(Token(TokenTypes.EOF, "", "null"))
+        if self.shouldPrint:
+            print(Token(TokenTypes.EOF, "", "null"))
         return (self.tokens, self.errorStatus)
 
     def scanToken(self):
@@ -45,7 +47,8 @@ class Scanner:
 
     def printAndAddToken(self, token, lexeme, literal):
         t = Token(token, lexeme, literal)
-        # print(t)
+        if self.shouldPrint:
+            print(t)
         self.tokens.append(t)
 
     def generateUnclosedString(self):

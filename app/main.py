@@ -24,6 +24,7 @@ def main():
     
     sc = Scanner(file_contents)
     if command == "tokenize":
+        sc.shouldPrint = True
         error = sc.scanTokens()[1]
         if error:
             exit(65)
