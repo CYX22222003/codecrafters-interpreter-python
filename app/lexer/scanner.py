@@ -19,7 +19,7 @@ class Scanner:
         while not self.isAtEnd():
             self.scanToken()
         self.tokens.append(Token("EOF", "", "null"))
-        print(Token(TokenTypes.EOF, "", "null"))
+        # print(Token(TokenTypes.EOF, "", "null"))
         return (self.tokens, self.errorStatus)
 
     def scanToken(self):
@@ -45,7 +45,7 @@ class Scanner:
 
     def printAndAddToken(self, token, lexeme, literal):
         t = Token(token, lexeme, literal)
-        print(t)
+        # print(t)
         self.tokens.append(t)
 
     def generateUnclosedString(self):
