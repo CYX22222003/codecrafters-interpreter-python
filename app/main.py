@@ -1,5 +1,5 @@
 import sys
-from scanner import Scanner
+from app.scanner import Scanner
 
 def scan(file_contents):
     # error = False
