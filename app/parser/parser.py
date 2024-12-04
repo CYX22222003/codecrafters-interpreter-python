@@ -74,7 +74,7 @@ class Parser:
     def consume(self, token, msg):
         if self.check(token):
             self.advance()
-        print(msg, file=sys.stderr())
+        print(msg, file=sys.stderr)
             
     def match(self, *types) -> bool:
         for type in types:

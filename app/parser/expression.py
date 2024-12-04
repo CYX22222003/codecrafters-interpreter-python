@@ -44,4 +44,5 @@ class Grouping(Expression):
         self.expr = expr
         
     def printExpression(self):
-        return super().parathesis("grouping", self.expr.printExpression())
+        grp = self.expr.printExpression()
+        return super().parathesis("grouping", grp)
