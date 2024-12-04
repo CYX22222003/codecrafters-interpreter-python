@@ -37,7 +37,7 @@ class Unary(Expression):
         self.right = right
         
     def printExpression(self):
-        return super().parathesis(self.operator.token.type.value, self.right.printExpression())
+        return Expression.parathesis(self.operator.token.type.value, self.right.printExpression())
     
 class Grouping(Expression):
     def __init__(self, expr):
