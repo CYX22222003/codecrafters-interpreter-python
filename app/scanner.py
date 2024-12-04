@@ -36,7 +36,7 @@ class Scanner:
             self.processString(char)
         elif char.isdigit():
             self.processNumber(char)
-        elif char.isalpha():
+        elif isValidIdentifierStart(char):
             self.processAlpha(char)
         else:
             self.errorStatus = True
@@ -182,3 +182,7 @@ class Scanner:
         token = "IDENTIFIER"
         literal = "null"
         self.printAndAddToken(token, char, literal)
+        
+    @staticmethod
+    def isValidIdentifierStart(char):
+        return char == "_" or char.isalpha()
