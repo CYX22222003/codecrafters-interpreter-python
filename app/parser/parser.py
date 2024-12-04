@@ -68,13 +68,15 @@ class Parser:
         
         elif self.match(TokenTypes.LEFT_PAREN):
             expr = self.expression()
-            self.consume(TokenTypes.RIGHT_PAREN, "Error")
+            if not self.check(TokenTypes.RIGHT_PAREN):
+                print("Error: unclosed expression", file=sys.stderr)
             return Grouping(expr)
     
     def consume(self, token, msg):
         if self.check(token):
             self.advance()
-        print(msg, file=sys.stderr)
+        else:
+            print(msg, file=sys.stderr)
             
     def match(self, *types) -> bool:
         for type in types:
