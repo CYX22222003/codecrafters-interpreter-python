@@ -5,4 +5,4 @@ class Token:
         self.literal = literal
 
     def __str__(self):
-        return print(f"{self.type} {self.lexeme} {self.literal}")
+        return f"{self.type} {self.lexeme} {self.literal}"
