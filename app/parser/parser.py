@@ -70,6 +70,8 @@ class Parser:
             expr = self.expression()
             if not self.check(TokenTypes.RIGHT_PAREN):
                 print("Error: unclosed expression", file=sys.stderr)
+            else:
+                self.advance()
             return Grouping(expr)
     
     def consume(self, token, msg):
