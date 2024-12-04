@@ -114,7 +114,7 @@ class Scanner:
                 char += self.source[self.pointer]
                 self.pointer += 1
 
-            if self.source[self.pointer] == ".":
+            if self.pointer < len(self.source) and self.source[self.pointer] == ".":
                 char += self.source[self.pointer]
                 self.pointer += 1
 
