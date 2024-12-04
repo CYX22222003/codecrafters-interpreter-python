@@ -1,119 +1,122 @@
 import sys
+from scanner import Scanner
 
 def scan(file_contents):
-    error = False
-    index = 0
-    while index < len(file_contents):
-        char = file_contents[index]
-        shouldPrint = True
-        literal = "null"
-        match char:
-            case "(":
-                token = "LEFT_PAREN"
-            case ")":
-                token = "RIGHT_PAREN"
-            case "{":
-                token = "LEFT_BRACE"
-            case "}":
-                token = "RIGHT_BRACE"
-            case ",":
-                token = "COMMA"
-            case ".":
-                token = "DOT"
-            case "-":
-                token = "MINUS"
-            case "+":
-                token = "PLUS"
-            case ";":
-                token = "SEMICOLON"
-            case "*":
-                token = "STAR"
-            case "!":
-                next = index + 1
-                if next < len(file_contents) and file_contents[next] == "=":
-                    token = "BANG_EQUAL"
-                    char = "!="
-                    index = next
-                else:
-                    token = "BANG"
-            case "=":
-                next = index + 1
-                if next < len(file_contents) and file_contents[next] == "=":
-                    token = "EQUAL_EQUAL"
-                    char = "=="
-                    index = next
-                else:
-                    token = "EQUAL"
-            case "<":
-                next = index + 1
-                if next < len(file_contents) and file_contents[next] == "=":
-                    token = "LESS_EQUAL"
-                    char = "<="
-                    index = next
-                else:
-                    token = "LESS"
-            case ">":
-                next = index + 1
-                if next < len(file_contents) and file_contents[next] == "=":
-                    token = "GREATER_EQUAL"
-                    char = ">="
-                    index = next
-                else:
-                    token = "GREATER"
-            case "/":
-                next = index + 1
-                if next < len(file_contents) and file_contents[next] == "/":
-                    while next < len(file_contents) and file_contents[next] != "\n":
-                        next += 1
-                    index = next
-                    shouldPrint = False
-                else:
-                    token = "SLASH"
-            case "\t" | " " | "\n":
-                shouldPrint = False
+    # error = False
+    # index = 0
+    # while index < len(file_contents):
+    #     char = file_contents[index]
+    #     shouldPrint = True
+    #     literal = "null"
+    #     match char:
+    #         case "(":
+    #             token = "LEFT_PAREN"
+    #         case ")":
+    #             token = "RIGHT_PAREN"
+    #         case "{":
+    #             token = "LEFT_BRACE"
+    #         case "}":
+    #             token = "RIGHT_BRACE"
+    #         case ",":
+    #             token = "COMMA"
+    #         case ".":
+    #             token = "DOT"
+    #         case "-":
+    #             token = "MINUS"
+    #         case "+":
+    #             token = "PLUS"
+    #         case ";":
+    #             token = "SEMICOLON"
+    #         case "*":
+    #             token = "STAR"
+    #         case "!":
+    #             next = index + 1
+    #             if next < len(file_contents) and file_contents[next] == "=":
+    #                 token = "BANG_EQUAL"
+    #                 char = "!="
+    #                 index = next
+    #             else:
+    #                 token = "BANG"
+    #         case "=":
+    #             next = index + 1
+    #             if next < len(file_contents) and file_contents[next] == "=":
+    #                 token = "EQUAL_EQUAL"
+    #                 char = "=="
+    #                 index = next
+    #             else:
+    #                 token = "EQUAL"
+    #         case "<":
+    #             next = index + 1
+    #             if next < len(file_contents) and file_contents[next] == "=":
+    #                 token = "LESS_EQUAL"
+    #                 char = "<="
+    #                 index = next
+    #             else:
+    #                 token = "LESS"
+    #         case ">":
+    #             next = index + 1
+    #             if next < len(file_contents) and file_contents[next] == "=":
+    #                 token = "GREATER_EQUAL"
+    #                 char = ">="
+    #                 index = next
+    #             else:
+    #                 token = "GREATER"
+    #         case "/":
+    #             next = index + 1
+    #             if next < len(file_contents) and file_contents[next] == "/":
+    #                 while next < len(file_contents) and file_contents[next] != "\n":
+    #                     next += 1
+    #                 index = next
+    #                 shouldPrint = False
+    #             else:
+    #                 token = "SLASH"
+    #         case "\t" | " " | "\n":
+    #             shouldPrint = False
 
-            case '"':
-                next = index + 1
-                isClose = False
-                while next < len(file_contents):
-                    char += file_contents[next]
-                    if file_contents[next] == '"':
-                        isClose = True
-                        break
-                    next += 1
+    #         case '"':
+    #             next = index + 1
+    #             isClose = False
+    #             while next < len(file_contents):
+    #                 char += file_contents[next]
+    #                 if file_contents[next] == '"':
+    #                     isClose = True
+    #                     break
+    #                 next += 1
  
-                index = next
-                if not isClose:
-                    error = True
-                    shouldPrint = False
-                    line_number = (
-                        file_contents.count("\n", 0, index) + 1
-                    )
-                    print(
-                        f"[line {line_number}] Error: Unterminated string.",
-                        file=sys.stderr,
-                    )
-                else:
-                    token = "STRING"
-                    literal = char[1: len(char) - 1]
+    #             index = next
+    #             if not isClose:
+    #                 error = True
+    #                 shouldPrint = False
+    #                 line_number = (
+    #                     file_contents.count("\n", 0, index) + 1
+    #                 )
+    #                 print(
+    #                     f"[line {line_number}] Error: Unterminated string.",
+    #                     file=sys.stderr,
+    #                 )
+    #             else:
+    #                 token = "STRING"
+    #                 literal = char[1: len(char) - 1]
             
-            case _:
-                error = True
-                shouldPrint = False
-                line_number = (
-                    file_contents.count("\n", 0, index) + 1
-                )
-                print(
-                    f"[line {line_number}] Error: Unexpected character: {char}",
-                    file=sys.stderr,
-                )
+    #         case _:
+    #             error = True
+    #             shouldPrint = False
+    #             line_number = (
+    #                 file_contents.count("\n", 0, index) + 1
+    #             )
+    #             print(
+    #                 f"[line {line_number}] Error: Unexpected character: {char}",
+    #                 file=sys.stderr,
+    #             )
         
-        if shouldPrint:
-            print(f"{token} {char} {literal}")
+    #     if shouldPrint:
+    #         print(f"{token} {char} {literal}")
         
-        index += 1
-    print("EOF  null")
-    return error
+    #     index += 1
+    # print("EOF  null")
+    # return error
+    sc = Scanner(file_contents)
+    return sc.scanTokens()[1]
 
 def main(): 
     if len(sys.argv) < 3:
