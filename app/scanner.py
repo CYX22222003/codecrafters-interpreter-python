@@ -24,6 +24,44 @@ class Scanner:
         char = self.source[self.pointer]
         shouldPrint = True
         literal = "null"
+        if char in {"(", ")", "{", "}", ",", ".", "-", "+", ";", "*"}:
+            self.processNormal(char)
+        elif char in {"!", ">", "=", "<"}:
+            self.processEquality(char)
+        elif char == "/":
+            self.processSlash(char)
+        elif char in {"\t", " ", "\n"}:
+            pass
+        elif char == '"':
+            self.processString(char)
+        elif char.isdigit():
+            self.processNumber(char)
+        else:
+            self.errorStatus = True
+            self.generateErrorMsg(char)
+        self.pointer += 1
+
+    def printAndAddToken(self, token, lexeme, literal):
+        t = Token(token, lexeme, literal)
+        print(t)
+        self.tokens.append(t)
+
+    def generateUnclosedString(self):
+        line_number = self.source.count("\n", 0, self.pointer) + 1
+        print(
+            f"[line {line_number}] Error: Unterminated string.",
+            file=sys.stderr,
+        )
+
+    def generateErrorMsg(self, char):
+        line_number = self.source.count("\n", 0, self.pointer) + 1
+        print(
+            f"[line {line_number}] Error: Unexpected character: {char}",
+            file=sys.stderr,
+        )
+
+    def processNormal(self, char):
+        literal = "null"
         if char == "(":
             token = "LEFT_PAREN"
         elif char == ")":
@@ -44,7 +82,11 @@ class Scanner:
             token = "SEMICOLON"
         elif char == "*":
             token = "STAR"
-        elif char == "!":
+        self.printAndAddToken(token, char, literal)
+
+    def processEquality(self, char):
+        literal = "null"
+        if char == "!":
             next = self.pointer + 1
             if next < len(self.source) and self.source[next] == "=":
                 token = "BANG_EQUAL"
@@ -76,86 +118,55 @@ class Scanner:
                 self.pointer = next
             else:
                 token = "GREATER"
-        elif char == "/":
-            next = self.pointer + 1
-            if next < len(self.source) and self.source[next] == "/":
-                while next < len(self.source) and self.source[next] != "\n":
-                    next += 1
-                self.pointer = next
-                shouldPrint = False
-            else:
-                token = "SLASH"
-        elif char in {"\t", " ", "\n"}:
-            shouldPrint = False
 
-        elif char == '"':
-            next = self.pointer + 1
-            isClose = False
-            while next < len(self.source):
-                char += self.source[next]
-                if self.source[next] == '"':
-                    isClose = True
-                    break
+        self.printAndAddToken(token, char, literal)
+
+    def processSlash(self, char):
+        literal = "null"
+        next = self.pointer + 1
+        if next < len(self.source) and self.source[next] == "/":
+            while next < len(self.source) and self.source[next] != "\n":
                 next += 1
-
             self.pointer = next
-            if not isClose:
-                self.errorStatus = True
-                shouldPrint = False
-                line_number = self.source.count("\n", 0, self.pointer) + 1
-                print(
-                    f"[line {line_number}] Error: Unterminated string.",
-                    file=sys.stderr,
-                )
-            else:
-                token = "STRING"
-                literal = char[1 : len(char) - 1]
-        elif char.isdigit():
-            self.pointer += 1
-            while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
-                char += self.source[self.pointer]
-                self.pointer += 1
-
-            if self.pointer < len(self.source) and self.source[self.pointer] == ".":
-                char += self.source[self.pointer]
-                self.pointer += 1
-
-            while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
-                char += self.source[self.pointer]
-                self.pointer += 1
-            
-            self.pointer -= 1
-            token = "NUMBER"
-            literal = float(char)
         else:
+            token = "SLASH"
+            self.printAndAddToken(token, char, literal)
+
+    def processString(self, char):
+        next = self.pointer + 1
+        isClose = False
+        while next < len(self.source):
+            char += self.source[next]
+            if self.source[next] == '"':
+                isClose = True
+                break
+            next += 1
+
+        self.pointer = next
+        if not isClose:
             self.errorStatus = True
-            shouldPrint = False
-            self.generateErrorMsg(char)
+            self.generateUnclosedString()
+        else:
+            token = "STRING"
+            literal = char[1 : len(char) - 1]
+            self.printAndAddToken(token, char, literal)
 
-        if shouldPrint:
-            print(f"{token} {char} {literal}")
-            self.tokens.append(Token(token, char, literal))
-
+    def processNumber(self, char):
         self.pointer += 1
-    
-    def generateErrorMsg(self, char):
-        line_number = self.source.count("\n", 0, self.pointer) + 1
-        print(
-            f"[line {line_number}] Error: Unexpected character: {char}",
-            file=sys.stderr,
-        )
+        while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
+            char += self.source[self.pointer]
+            self.pointer += 1
 
-    def processNormal(self):
-        pass
+        if self.pointer < len(self.source) and self.source[self.pointer] == ".":
+            char += self.source[self.pointer]
+            self.pointer += 1
+        
+        while self.pointer < len(self.source) and self.source[self.pointer].isdigit():
+            char += self.source[self.pointer]
+            self.pointer += 1
 
-    def processEquality(self):
-        pass
+        self.pointer -= 1
+        token = "NUMBER"
+        literal = float(char)
 
-    def processSlash(self):
-        pass
-
-    def processString(self):
-        pass
-
-    def processNumber(self):
-        pass
+        self.printAndAddToken(token, char, literal)
