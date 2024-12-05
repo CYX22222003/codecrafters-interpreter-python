@@ -4,7 +4,7 @@ from app.lexer.token import Token
 def convertTruthyNil(value):
     if type(value) == bool:
         return 'true' if value else 'false'      
-    if type(value) == None:
+    if value is None:
         return 'nil'
     return value
 
