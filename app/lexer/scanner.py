@@ -1,7 +1,7 @@
 from app.lexer.token import Token
 from app.lexer.reserved_word import ReservedWord
 from app.lexer.token_types import TokenTypes
-from app.lexer.utils import isValidIdentifierBody, isValidIdentifierStart, isReservedWord
+from app.lexer.utils import isValidIdentifierBody, isValidIdentifierStart, isReservedWord, countLine
 import sys
 
 class Scanner:
@@ -13,16 +13,19 @@ class Scanner:
         self.errorStatus = False
         self.shouldPrint = shouldPrint
 
+
     def isAtEnd(self):
         return self.pointer >= self.upper
+
 
     def scanTokens(self):
         while not self.isAtEnd():
             self.scanToken()
-        self.tokens.append(Token("EOF", "", "null"))
+        self.tokens.append(Token(TokenTypes.EOF, "", "null", self.pointer))
         if self.shouldPrint:
-            print(Token(TokenTypes.EOF, "", "null"))
+            print(Token(TokenTypes.EOF, "", "null", self.pointer))
         return (self.tokens, self.errorStatus)
+
 
     def scanToken(self):
         char = self.source[self.pointer]
@@ -45,25 +48,29 @@ class Scanner:
             self.generateErrorMsg(char)
         self.pointer += 1
 
+
     def printAndAddToken(self, token, lexeme, literal):
-        t = Token(token, lexeme, literal)
+        t = Token(token, lexeme, literal, countLine(self.source, 0, self.pointer))
         if self.shouldPrint:
             print(t)
         self.tokens.append(t)
 
+
     def generateUnclosedString(self):
-        line_number = self.source.count("\n", 0, self.pointer) + 1
+        line_number = countLine(self.source, 0, self.pointer)
         print(
             f"[line {line_number}] Error: Unterminated string.",
             file=sys.stderr,
         )
 
+
     def generateErrorMsg(self, char):
-        line_number = self.source.count("\n", 0, self.pointer) + 1
+        line_number = countLine(self.source, 0, self.pointer)
         print(
             f"[line {line_number}] Error: Unexpected character: {char}",
             file=sys.stderr,
         )
+
 
     def processNormal(self, char):
         literal = "null"
@@ -88,6 +95,7 @@ class Scanner:
         elif char == "*":
             token = TokenTypes.STAR
         self.printAndAddToken(token, char, literal)
+
 
     def processEquality(self, char):
         literal = "null"
@@ -123,8 +131,8 @@ class Scanner:
                 self.pointer = next
             else:
                 token = TokenTypes.GREATER
-
         self.printAndAddToken(token, char, literal)
+
 
     def processSlash(self, char):
         literal = "null"
@@ -146,7 +154,7 @@ class Scanner:
                 isClose = True
                 break
             next += 1
-
+            
         self.pointer = next
         if not isClose:
             self.errorStatus = True
@@ -155,6 +163,7 @@ class Scanner:
             token = TokenTypes.STRING
             literal = char[1 : len(char) - 1]
             self.printAndAddToken(token, char, literal)
+
 
     def processNumber(self, char):
         self.pointer += 1
@@ -176,6 +185,7 @@ class Scanner:
 
         self.printAndAddToken(token, char, literal)
 
+
     def processAlpha(self, char):
         self.pointer += 1
         while (not self.isAtEnd()) and isValidIdentifierBody(
@@ -192,6 +202,7 @@ class Scanner:
             token = TokenTypes.IDENTIFIER
             literal = "null"
         self.printAndAddToken(token, char, literal)
+
 
     def getTokens(self):
         return self.tokens

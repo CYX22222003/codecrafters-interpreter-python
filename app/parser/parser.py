@@ -55,7 +55,7 @@ class Parser:
             return Unary(opr, right)
         return self.primary()
     
-    def primary(self):
+    def primary(self) -> Expression:
         if self.match(TokenTypes.FALSE):
             return Literal("false")
         elif self.match(TokenTypes.TRUE):
@@ -74,7 +74,7 @@ class Parser:
                 self.advance()
             return Grouping(expr)
     
-    def consume(self, token, msg):
+    def consume(self, token: Token, msg: str):
         if self.check(token):
             self.advance()
         else:

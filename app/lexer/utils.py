@@ -10,3 +10,6 @@ def isValidIdentifierBody(char):
 
 def isReservedWord(word):
     return ReservedWord.isReservedWord(word)
+
+def countLine(content, start, end):
+    return content.count("\n", start, end) + 1
