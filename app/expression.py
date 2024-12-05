@@ -27,7 +27,7 @@ class PrintExpression(Expression):
 
     def evaluateExpression(self):
         print(evaluateFormat(self.expr.evaluateExpression()))
-        return self.expr.evaluateExpression()
+        return
 
     def printExpression(self):
         return Expression.parathesis("print", str(self.expr.evaluateExpression()))
