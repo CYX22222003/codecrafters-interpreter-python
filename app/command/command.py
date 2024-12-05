@@ -48,6 +48,7 @@ class Evaluate(Command):
     def __init__(self, content):
         super().__init__(content)
         self.shouldPrintFinal = False
+        self.parseErrorCode = 70
     
     def execute(self):
         sc = self.scanner
@@ -57,10 +58,26 @@ class Evaluate(Command):
         p = Parser(tokens)
         expr = p.parse()
         if type(expr) == Empty:
-            exit(65)
+            exit(self.parseErrorCode)
         int = Interpreter(expr)
         
         final = evaluateFormat(int.evaluate())
         if self.shouldPrintFinal:
             print(final)
     
+class NormalEvaluate(Evaluate):
+    def __init__(self, content):
+        super().__init__(content)
+        super().shouldPrintFinal = True
+    
+    def execute(self):
+        return super().execute()
+    
+class RunEvaluate(Evaluate):
+    def __init__(self, content):
+        super().__init__(content)
+        super().shouldPrintFinal = False
+        self.parseErrorCode = 65
+    
+    def execute(self):
+        return super().execute()

@@ -1,5 +1,5 @@
 import sys
-from app.command.command import Evaluate, Parse, Tokenize
+from app.command.command import NormalEvaluate, Parse, RunEvaluate, Tokenize
 from app.lexer.scanner import Scanner
 
 
@@ -28,9 +28,9 @@ def main():
     elif command == "parse":
         c = Parse(file_contents)
     elif command == "run":
-        c = Evaluate(file_contents)
+        c = RunEvaluate(file_contents)
     elif command == "evaluate":
-        c = Evaluate(file_contents)
+        c = NormalEvaluate(file_contents)
         c.shouldPrintFinal = True
     c.execute()
 
