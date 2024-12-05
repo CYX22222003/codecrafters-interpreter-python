@@ -69,7 +69,7 @@ class Scanner:
 
     def generateErrorMsg(self, char):
         line_number = countLine(self.source, 0, self.pointer)
-        reportError(line_number, "", f"Unexpeceted character: {char}")
+        reportError(line_number, "", f"Unexpected character: {char}")
 
     def processNormal(self, char):
         literal = "null"
