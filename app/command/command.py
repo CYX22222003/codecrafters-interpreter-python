@@ -40,7 +40,7 @@ class Parse(Command):
         p = Parser(tokens)
         expr_xs = p.parse()
         if type(expr_xs) == Empty:
-            exit(70)
+            exit(65)
         for expr in expr_xs:
             print(expr.printExpression())
 
@@ -57,7 +57,7 @@ class Evaluate(Command):
         p = Parser(tokens)
         expr = p.parse()
         if type(expr) == Empty:
-            exit(70)
+            exit(65)
         int = Interpreter(expr)
         
         final = evaluateFormat(int.evaluate())
