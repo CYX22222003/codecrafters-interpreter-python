@@ -39,6 +39,8 @@ class Parse(Command):
             exit(65)
         p = Parser(tokens)
         expr_xs = p.parse()
+        if type(expr_xs) == Empty:
+            exit(70)
         for expr in expr_xs:
             print(expr.printExpression())
 
@@ -51,7 +53,7 @@ class Evaluate(Command):
         sc = self.scanner
         tokens, error = sc.scanTokens()
         if error:
-            exit(70)
+            exit(65)
         p = Parser(tokens)
         expr = p.parse()
         if type(expr) == Empty:

@@ -16,8 +16,8 @@ class Parser:
                 statements.append(self.statement())
             return statements
         except ParseException:
-            exit(65)
-            # return [Empty()]
+            # exit(65)
+            return Empty()
 
     def statement(self):
         if self.match(TokenTypes.PRINT):
