@@ -42,9 +42,9 @@ class Parser:
             if self.match(TokenTypes.VAR):
                 return self.varDeclare()
             return self.statement()
-        except ParseException as e:
+        except ParseException:
             self.synchronize()
-            exit(70)
+            exit(65)
 
     def varDeclare(self):
         name = self.consume(TokenTypes.IDENTIFIER, "Expect variable name.")
