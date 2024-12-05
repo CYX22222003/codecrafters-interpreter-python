@@ -2,7 +2,7 @@ import sys
 from app.lexer.scanner import Scanner
 from app.parser.expression import Empty
 from app.parser.parser import Parser
-from app.parser.interpreter import convertTruthy
+from app.parser.interpreter import convertTruthyNil
 
 def scan(file_contents): 
     sc = Scanner(file_contents)

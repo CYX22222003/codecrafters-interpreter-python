@@ -1,9 +1,11 @@
 from app.lexer.token_types import TokenTypes
 from app.lexer.token import Token
 
-def convertTruthy(value):
+def convertTruthyNil(value):
     if type(value) == bool:
         return 'true' if value else 'false'      
+    if type(value) == None:
+        return 'nil'
     return value
 
 def getOpFunction(token: Token):
