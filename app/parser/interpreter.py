@@ -1,16 +1,13 @@
 from app.lexer.token_types import TokenTypes
 from app.lexer.token import Token
 
-def evaluateFormat(value):
-    if type(value) == bool:
-        return 'true' if value else 'false'      
-    if value is None:
-        return 'nil'
-    if type(value) == float and value.is_integer():
-        return int(value)
-    return value
+def getUnaryOp(t: Token):
+    if t.type == TokenTypes.BANG:
+        return lambda a : not a
+    elif t.type == TokenTypes.MINUS:
+        return lambda a : -1 * a
 
-def getOpFunction(token: Token):
+def getBinaryOp(token: Token):
     if token.type == TokenTypes.PLUS:
         return lambda x, y: x + y
     

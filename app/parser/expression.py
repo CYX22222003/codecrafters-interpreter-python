@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from app.lexer.token import Token
-from app.parser.interpreter import getOpFunction
+from app.parser.interpreter import getBinaryOp, getUnaryOp
 
 class Expression(ABC):
     @abstractmethod
@@ -19,8 +19,6 @@ class Expression(ABC):
         out += ")"
         return out
     
-    def getOp(token: Token):
-        return getOpFunction(token)
         
 class Binary(Expression):
     def __init__(self, left: Expression, token: Token, right: Expression):
@@ -36,7 +34,7 @@ class Binary(Expression):
     def evaluateExpression(self):
         left = self.left.evaluateExpression()
         right = self.right.evaluateExpression()
-        func = Expression.getOp(self.token)
+        func = getBinaryOp(self.token)
         return func(left, right)
     
 class Literal(Expression):
@@ -62,7 +60,9 @@ class Unary(Expression):
         return Expression.parathesis(self.operator.type.value, self.right.printExpression())
     
     def evaluateExpression(self):
-        pass
+        f = getUnaryOp(self.operator)
+        right = self.right.evaluateExpression()
+        return f(right)
     
 class Grouping(Expression):
     def __init__(self, expr):

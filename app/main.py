@@ -1,15 +1,14 @@
 import sys
+from app.command.command import Evaluate, Parse, Tokenize
 from app.lexer.scanner import Scanner
-from app.parser.expression import Empty
-from app.parser.parser import Parser
-from app.parser.interpreter import evaluateFormat
 
-def scan(file_contents): 
+
+def scan(file_contents):
     sc = Scanner(file_contents)
     return sc.scanTokens()[1]
 
 
-def main(): 
+def main():
     if len(sys.argv) < 3:
         print("Usage: ./your_program.sh tokenize <filename>", file=sys.stderr)
         exit(1)
@@ -23,34 +22,15 @@ def main():
 
     with open(filename) as file:
         file_contents = file.read()
-    
-    sc = Scanner(file_contents)
+
     if command == "tokenize":
-        sc.shouldPrint = True
-        error = sc.scanTokens()[1]
-        if error:
-            exit(65)
+        c = Tokenize(file_contents)
     elif command == "parse":
-        tokens = sc.scanTokens()[0]
-        error = sc.scanTokens()[1]
-        if error:
-            exit(65)
-        p = Parser(tokens)
-        expr = p.parse()
-        if type(expr) == Empty:
-            exit(65)
-        print(expr.printExpression())
+        c = Parse(file_contents)
     elif command == "evaluate":
-        tokens = sc.scanTokens()[0]
-        error = sc.scanTokens()[1]
-        if error:
-            exit(65)
-        p = Parser(tokens)
-        expr = p.parse()
-        if type(expr) == Empty:
-            exit(65)
-        print(evaluateFormat(expr.evaluateExpression()))
-        
+        c = Evaluate(file_contents)
+    c.execute()
+
 
 if __name__ == "__main__":
     main()

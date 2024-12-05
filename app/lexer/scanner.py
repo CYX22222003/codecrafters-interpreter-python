@@ -22,7 +22,7 @@ class Scanner:
     def isAtEnd(self):
         return self.pointer >= self.upper
 
-    def scanTokens(self):
+    def scanTokens(self) -> tuple[list[Token], bool]:
         while not self.isAtEnd():
             self.scanToken()
         self.tokens.append(
