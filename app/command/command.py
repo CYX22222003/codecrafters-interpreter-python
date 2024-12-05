@@ -68,7 +68,7 @@ class Evaluate(Command):
 class NormalEvaluate(Evaluate):
     def __init__(self, content):
         super().__init__(content)
-        super().shouldPrintFinal = True
+        self.shouldPrintFinal = True
     
     def execute(self):
         return super().execute()
@@ -76,7 +76,7 @@ class NormalEvaluate(Evaluate):
 class RunEvaluate(Evaluate):
     def __init__(self, content):
         super().__init__(content)
-        super().shouldPrintFinal = False
+        self.shouldPrintFinal = False
         self.parseErrorCode = 65
     
     def execute(self):
