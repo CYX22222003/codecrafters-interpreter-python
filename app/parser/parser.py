@@ -9,9 +9,9 @@ class Parser:
         self.tokens = tokens
         self.current = 0
         
-    def parseForEvaluate(self) -> Expression:
+    def parseForEvaluate(self) -> list[Expression]:
         try:
-            return self.expression()
+            return [self.expression()]
         except ParseException:
             exit(65)
 
