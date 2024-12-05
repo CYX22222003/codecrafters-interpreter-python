@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from app.lexer.token import Token
-from app.interpreter.interpreter import getBinaryOp, getUnaryOp
+from app.interpreter.utils import getBinaryOp, getUnaryOp
 
 class Expression(ABC):
     @abstractmethod
