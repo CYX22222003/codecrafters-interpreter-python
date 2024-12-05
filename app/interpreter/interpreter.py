@@ -51,7 +51,7 @@ def getBinaryOp(token: Token):
 
         def f(x, y):
             if not isBinaryNumber(x, y):
-                raise LoxRuntimeException(token, "Operands must be numbers.")
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
             return x - y
 
         return f
@@ -60,7 +60,7 @@ def getBinaryOp(token: Token):
 
         def times(x, y):
             if not isBinaryNumber(x, y):
-                raise LoxRuntimeException(token, "Operands must be numbers.")
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
             return x * y
 
         return times
@@ -84,19 +84,39 @@ def getBinaryOp(token: Token):
         return lambda x, y: x or y
 
     elif token.type == TokenTypes.LESS:
-        return lambda x, y: x < y
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
+            return x < y
+        return f
 
     elif token.type == TokenTypes.GREATER:
-        return lambda x, y: x > y
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
+            return x > y
+        return f
 
     elif token.type == TokenTypes.LESS_EQUAL:
-        return lambda x, y: x <= y
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
+            return x <= y
+        return f
 
     elif token.type == TokenTypes.GREATER:
-        return lambda x, y: x > y
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
+            return x > y
+        return f
 
     elif token.type == TokenTypes.GREATER_EQUAL:
-        return lambda x, y: x >= y
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.\n")
+            return x >= y
+        return f
 
     elif token.type == TokenTypes.EQUAL_EQUAL:
         return lambda x, y: x == y
