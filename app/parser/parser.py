@@ -8,16 +8,22 @@ class Parser:
     def __init__(self, tokens: list[Token]):
         self.tokens = tokens
         self.current = 0
+        
+    def parseForEvaluate(self) -> Expression:
+        try:
+            return self.expression()
+        except ParseException:
+            exit(65)
 
-    def parse(self) -> list[Expression]:
+    def parseForRun(self) -> list[Expression]:
         statements = []
         try:
             while not self.isAtEnd():
                 statements.append(self.statement())
             return statements
         except ParseException:
-            # exit(65)
-            return Empty()
+            exit(65)
+            # return Empty()
 
     def statement(self):
         if self.match(TokenTypes.PRINT):

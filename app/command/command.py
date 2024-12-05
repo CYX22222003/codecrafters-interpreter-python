@@ -38,7 +38,7 @@ class Parse(Command):
         if error:
             exit(65)
         p = Parser(tokens)
-        expr_xs = p.parse()
+        expr_xs = p.parseForRun()
         if type(expr_xs) == Empty:
             exit(65)
         for expr in expr_xs:
@@ -71,13 +71,36 @@ class NormalEvaluate(Evaluate):
         self.shouldPrintFinal = True
     
     def execute(self):
-        return super().execute()
+        sc = self.scanner
+        tokens, error = sc.scanTokens()
+        if error:
+            exit(65)
+        p = Parser(tokens)
+        expr = p.parseForEvaluate()
+        if type(expr) == Empty:
+            exit(self.parseErrorCode)
+        int = Interpreter([expr])
+        
+        final = evaluateFormat(int.evaluate())
+        if self.shouldPrintFinal:
+            print(final) 
     
 class RunEvaluate(Evaluate):
     def __init__(self, content):
         super().__init__(content)
         self.shouldPrintFinal = False
-        self.parseErrorCode = 65
     
     def execute(self):
-        return super().execute()
+        sc = self.scanner
+        tokens, error = sc.scanTokens()
+        if error:
+            exit(65)
+        p = Parser(tokens)
+        expr = p.parseForRun()
+        if type(expr) == Empty:
+            exit(self.parseErrorCode)
+        int = Interpreter(expr)
+        
+        final = evaluateFormat(int.evaluate())
+        if self.shouldPrintFinal:
+            print(final)
