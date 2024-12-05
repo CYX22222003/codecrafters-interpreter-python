@@ -33,11 +33,11 @@ def main():
         tokens = sc.scanTokens()[0]
         error = sc.scanTokens()[1]
         if error:
-            return
+            exit(65)
         p = Parser(tokens)
         expr = p.parse()
         if type(expr) == Empty:
-            return 
+            exit(65)
         print(expr.printExpression())
         
 
