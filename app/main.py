@@ -49,7 +49,7 @@ def main():
         expr = p.parse()
         if type(expr) == Empty:
             exit(65)
-        print(convertTruthy(expr.evaluateExpression()))
+        print(convertTruthyNil(expr.evaluateExpression()))
         
 
 if __name__ == "__main__":
