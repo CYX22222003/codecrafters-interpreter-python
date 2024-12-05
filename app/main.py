@@ -2,6 +2,7 @@ import sys
 from app.lexer.scanner import Scanner
 from app.parser.expression import Empty
 from app.parser.parser import Parser
+from app.parser.interpreter import convertTruthy
 
 def scan(file_contents): 
     sc = Scanner(file_contents)
@@ -48,7 +49,7 @@ def main():
         expr = p.parse()
         if type(expr) == Empty:
             exit(65)
-        print(expr.evaluateExpression())
+        print(convertTruthy(expr.evaluateExpression()))
         
 
 if __name__ == "__main__":

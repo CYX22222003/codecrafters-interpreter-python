@@ -1,6 +1,11 @@
 from app.lexer.token_types import TokenTypes
 from app.lexer.token import Token
 
+def convertTruthy(value):
+    if type(value) == bool:
+        return 'true' if value else 'false'      
+    return value
+
 def getOpFunction(token: Token):
     if token.type == TokenTypes.PLUS:
         return lambda x, y: x + y
