@@ -9,7 +9,7 @@ class Interpreter:
         
     def evaluate(self):
         try:
-            self.expr.evaluateExpression()
+            return self.expr.evaluateExpression()
         except LoxRuntimeException as e:
             reportRuntimeError(e)
             exit(70)
