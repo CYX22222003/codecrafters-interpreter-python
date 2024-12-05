@@ -18,8 +18,8 @@ class Interpreter:
 def getUnaryOp(t: Token):
     if t.type == TokenTypes.BANG:
         def f(a):
-            if type(a) != bool:
-                raise LoxRuntimeException(t, "Operand must be a boolean.\n")
+            # if type(a) != bool:
+            #    raise LoxRuntimeException(t, "Operand must be a boolean.\n")
             return not a
         
         return f
