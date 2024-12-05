@@ -1,7 +1,9 @@
 from abc import ABC, abstractmethod
+from app.environment.environment import Environment
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
 from app.interpreter.formatter import evaluateFormat
+
 
 class Expression(ABC):
     @abstractmethod
@@ -21,6 +23,31 @@ class Expression(ABC):
         return out
 
 
+class Variable(Expression):
+    def __init__(self, name: Token, env: Environment):
+        self.name = name
+        self.env = env
+        
+    def evaluateExpression(self):
+        return self.env.get(self.name)
+    
+    def printExpression(self):
+        return Expression.parathesis("identifier", self.name.lexeme)
+
+
+class Var(Expression):
+    def __init__(self, name: Token, identifier: Expression, env: Environment):
+        self.name = name
+        self.identifier = identifier
+        self.env = env
+
+    def evaluateExpression(self):
+        self.env.put(self.name.lexeme, self.identifier.evaluateExpression())
+
+    def printExpression(self):
+        return Expression.parathesis("var", str(self.identifier.printExpression()))
+
+
 class PrintExpression(Expression):
     def __init__(self, expr):
         self.expr = expr
@@ -30,7 +57,7 @@ class PrintExpression(Expression):
         return
 
     def printExpression(self):
-        return Expression.parathesis("print", str(self.expr.evaluateExpression()))
+        return Expression.parathesis("print", str(self.expr.printExpression()))
 
 
 class Binary(Expression):

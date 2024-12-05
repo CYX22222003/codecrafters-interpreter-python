@@ -1,1 +1,7 @@
-"baz" < true
+(37 + 42 - 21) > (76 - 37) * 2;
+print !false;
+"baz" + "hello" + "quz" + "bar" == "bazhelloquzbar";
+print !false;
+var a = 2;
+var b = 5;
+print a * b;
