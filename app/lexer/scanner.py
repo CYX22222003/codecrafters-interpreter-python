@@ -65,7 +65,7 @@ class Scanner:
 
     def generateUnclosedString(self):
         line_number = countLine(self.source, 0, self.pointer)
-        reportError(line_number, "", "Unterminated String")
+        reportError(line_number, "", "Unterminated String.")
 
     def generateErrorMsg(self, char):
         line_number = countLine(self.source, 0, self.pointer)
