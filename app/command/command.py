@@ -64,10 +64,8 @@ class NormalEvaluate(Evaluate):
         if error:
             exit(65)
         p = Parser(tokens)
-        expr = p.parseForEvaluate()
-        if type(expr) == Empty:
-            exit(65)
-        int = Interpreter([expr])
+        expr_xs = p.parseForEvaluate()
+        int = Interpreter(expr_xs)
         
         final = evaluateFormat(int.evaluate())
         if self.shouldPrintFinal:
@@ -85,8 +83,6 @@ class RunEvaluate(Evaluate):
             exit(65)
         p = Parser(tokens)
         expr = p.parseForRun()
-        if type(expr) == Empty:
-            exit(65)
         int = Interpreter(expr)
         
         final = evaluateFormat(int.evaluate())
