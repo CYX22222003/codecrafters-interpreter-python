@@ -73,7 +73,7 @@ class Grouping(Expression):
         return Expression.parathesis("group", grp)
     
     def evaluateExpression(self):
-        return super().evaluateExpression()
+        return self.expr.evaluateExpression()
     
 class Empty(Expression):
     def printExpression(self):
