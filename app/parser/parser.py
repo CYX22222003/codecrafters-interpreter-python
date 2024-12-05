@@ -1,7 +1,7 @@
 from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
-from app.parser.expression import Literal, Binary, Expression, Unary, Grouping, Empty
+from app.expression import Literal, Binary, Expression, Unary, Grouping, Empty
 from app.exception.exceptions import ParseException
 
 class Parser:

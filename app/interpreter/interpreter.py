@@ -40,8 +40,10 @@ def getBinaryOp(token: Token):
     elif token.type == TokenTypes.LESS_EQUAL:
         return lambda x, y : x <= y
     
-    elif token.type == TokenTypes.GREATER_EQUAL:
+    elif token.type == TokenTypes.GREATER:
         return lambda x, y: x > y
+    elif token.type == TokenTypes.GREATER_EQUAL:
+        return lambda x, y: x >= y
     
     elif token.type == TokenTypes.EQUAL_EQUAL:
         return lambda x, y: x == y
