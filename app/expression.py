@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
-
+from app.interpreter.formatter import evaluateFormat
 
 class Expression(ABC):
     @abstractmethod
@@ -26,7 +26,7 @@ class PrintExpression(Expression):
         self.expr = expr
 
     def evaluateExpression(self):
-        print(self.expr.evaluateExpression())
+        print(evaluateFormat(self.expr.evaluateExpression()))
         return self.expr.evaluateExpression()
 
     def printExpression(self):
