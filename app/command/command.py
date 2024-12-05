@@ -51,11 +51,11 @@ class Evaluate(Command):
         sc = self.scanner
         tokens, error = sc.scanTokens()
         if error:
-            exit(65)
+            exit(70)
         p = Parser(tokens)
         expr = p.parse()
         if type(expr) == Empty:
-            exit(65)
+            exit(70)
         int = Interpreter(expr)
         
         final = evaluateFormat(int.evaluate())
