@@ -45,7 +45,9 @@ def getBinaryOp(token: Token):
     elif token.type == TokenTypes.STAR:
 
         def times(x, y):
-            if not (type(x) == float or type(x) == int or type(y) == float or type(y) == int):
+            if not (
+                (type(x) == float or type(x) == int) and (type(y) == float or type(y) == int)
+            ):
                 raise LoxRuntimeException(token, "Operands must be numbers.")
             return x * y
 
@@ -54,7 +56,9 @@ def getBinaryOp(token: Token):
     elif token.type == TokenTypes.SLASH:
 
         def divide(x, y):
-            if not(type(x) == float or type(x) == int or type(y) == float or type(y) == int):
+            if not (
+                (type(x) == float or type(x) == int) and (type(y) == float or type(y) == int)
+            ):
                 raise LoxRuntimeException(token, "Operands must be numbers.")
             if y == 0:
                 raise LoxRuntimeException(token, "ZeroDivisionError")
