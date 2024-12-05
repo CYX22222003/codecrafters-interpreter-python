@@ -37,17 +37,29 @@ def getUnaryOp(t: Token):
 
 def getBinaryOp(token: Token):
     if token.type == TokenTypes.PLUS:
-        return lambda x, y: x + y
+
+        def f(x, y):
+            if not (isBinaryNumber(x, y) or isBinaryString(x, y)):
+                raise LoxRuntimeException(
+                    token, "Operands must be two numbers or two strings.\n"
+                )
+            return x + y
+
+        return f
 
     elif token.type == TokenTypes.MINUS:
-        return lambda x, y: x - y
+
+        def f(x, y):
+            if not isBinaryNumber(x, y):
+                raise LoxRuntimeException(token, "Operands must be numbers.")
+            return x * y
+
+        return f
 
     elif token.type == TokenTypes.STAR:
 
         def times(x, y):
-            if not (
-                (type(x) == float or type(x) == int) and (type(y) == float or type(y) == int)
-            ):
+            if not isBinaryNumber(x, y):
                 raise LoxRuntimeException(token, "Operands must be numbers.")
             return x * y
 
@@ -56,9 +68,7 @@ def getBinaryOp(token: Token):
     elif token.type == TokenTypes.SLASH:
 
         def divide(x, y):
-            if not (
-                (type(x) == float or type(x) == int) and (type(y) == float or type(y) == int)
-            ):
+            if not isBinaryNumber(x, y):
                 raise LoxRuntimeException(token, "Operands must be numbers.")
             if y == 0:
                 raise LoxRuntimeException(token, "ZeroDivisionError")
@@ -93,3 +103,11 @@ def getBinaryOp(token: Token):
 
     elif token.type == TokenTypes.BANG_EQUAL:
         return lambda x, y: x != y
+
+
+def isBinaryNumber(x, y):
+    return (type(x) == float or type(x) == int) and (type(y) == float or type(y) == int)
+
+
+def isBinaryString(x, y):
+    return type(x) == str and type(y) == str
