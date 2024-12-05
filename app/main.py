@@ -16,7 +16,7 @@ def main():
     command = sys.argv[1]
     filename = sys.argv[2]
 
-    if command not in {"tokenize", "parse", "evaluate"}:
+    if command not in {"tokenize", "parse", "evaluate", "run"}:
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
@@ -27,7 +27,7 @@ def main():
         c = Tokenize(file_contents)
     elif command == "parse":
         c = Parse(file_contents)
-    elif command == "evaluate":
+    elif command == "run":
         c = Evaluate(file_contents)
     c.execute()
 
