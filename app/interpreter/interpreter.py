@@ -1,11 +1,34 @@
+from app.exception.exceptions import LoxRuntimeException
+from app.exception.utils import reportRuntimeError
 from app.lexer.token_types import TokenTypes
 from app.lexer.token import Token
 
+class Interpreter:
+    def __init__(self, expr):
+        self.expr = expr
+        
+    def evaluate(self):
+        try:
+            self.expr.evaluateExpression()
+        except LoxRuntimeException as e:
+            reportRuntimeError(e)
+        
+
 def getUnaryOp(t: Token):
     if t.type == TokenTypes.BANG:
-        return lambda a : not a
+        def f(a):
+            if type(a) != bool:
+                raise LoxRuntimeException(t, "Operand must be a boolean.\n")
+            return not a
+        
+        return f
     elif t.type == TokenTypes.MINUS:
-        return lambda a : -1 * a
+        def f(a):
+            if type(a) != int and type(a) != float:
+                raise LoxRuntimeException(t, "Operand must be a number.\n")
+            return -1 * a
+        return f
+
 
 def getBinaryOp(token: Token):
     if token.type == TokenTypes.PLUS:
@@ -51,3 +74,4 @@ def getBinaryOp(token: Token):
     
     elif token.type == TokenTypes.BANG_EQUAL:
         return lambda x, y: x != y
+
