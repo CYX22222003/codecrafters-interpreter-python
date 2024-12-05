@@ -39,7 +39,7 @@ class Parse(Command):
         tokens, error = sc.scanTokens()
         if error:
             exit(65)
-        p = Parser(tokens)
+        p = Parser(tokens, self.environment)
         expr_xs = p.parseForEvaluate()
         if type(expr_xs) == Empty:
             exit(65)
