@@ -38,10 +38,9 @@ class Parse(Command):
         if error:
             exit(65)
         p = Parser(tokens)
-        expr = p.parse()
-        if type(expr) == Empty:
-            exit(65)
-        print(expr.printExpression())
+        expr_xs = p.parse()
+        for expr in expr_xs:
+            print(expr.printExpression())
 
 class Evaluate(Command):
     def __init__(self, content):

@@ -1,7 +1,7 @@
 from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
-from app.expression import Literal, Binary, Expression, Unary, Grouping, Empty
+from app.expression import Literal, Binary, Expression, Unary, Grouping, Empty, PrintExpression
 from app.exception.exceptions import ParseException
 
 class Parser:
@@ -9,12 +9,31 @@ class Parser:
         self.tokens = tokens
         self.current = 0
 
-    def parse(self) -> Expression:
+    def parse(self) -> list[Expression]:
+        statements = []
         try:
-            return self.expression()
+            while not self.isAtEnd():
+                statements.append(self.statement())
+            return statements
         except ParseException:
-            return Empty()
+            exit(65)
+            # return [Empty()]
 
+    def statement(self):
+        if self.match(TokenTypes.PRINT):
+            return self.printStatement()
+        return self.expressionStatement()
+    
+    def printStatement(self):
+        expr = self.expression()
+        self.consume(TokenTypes.SEMICOLON, 'Expect ";" after value')
+        return PrintExpression(expr)
+    
+    def expressionStatement(self):
+        expr = self.expression()
+        self.consume(TokenTypes.SEMICOLON, 'Expect ";" after value')
+        return expr
+    
     def expression(self):
         return self.equality()
 
