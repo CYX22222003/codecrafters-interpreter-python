@@ -12,6 +12,7 @@ class Interpreter:
             self.expr.evaluateExpression()
         except LoxRuntimeException as e:
             reportRuntimeError(e)
+            exit(70)
         
 
 def getUnaryOp(t: Token):
