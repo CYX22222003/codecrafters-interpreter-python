@@ -29,6 +29,9 @@ def main():
         c = Parse(file_contents)
     elif command == "run":
         c = Evaluate(file_contents)
+    elif command == "evaluate":
+        c = Evaluate(file_contents)
+        c.shouldPrintFinal = True
     c.execute()
 
 

@@ -10,9 +10,7 @@ class Interpreter:
         out = None
         try:
             for e in self.exprs:
-                temp = e.evaluateExpression()
-                if temp is not None:
-                    out = temp 
+                out = e.evaluateExpression()
             return out
         except LoxRuntimeException as e:
             reportRuntimeError(e)

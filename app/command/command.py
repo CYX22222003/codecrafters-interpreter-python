@@ -45,6 +45,7 @@ class Parse(Command):
 class Evaluate(Command):
     def __init__(self, content):
         super().__init__(content)
+        self.shouldPrintFinal = False
     
     def execute(self):
         sc = self.scanner
@@ -56,5 +57,8 @@ class Evaluate(Command):
         if type(expr) == Empty:
             exit(65)
         int = Interpreter(expr)
-        print(evaluateFormat(int.evaluate()))
+        
+        final = evaluateFormat(int.evaluate())
+        if self.shouldPrintFinal:
+            print(final)
     
