@@ -46,3 +46,7 @@ class Grouping(Expression):
     def printExpression(self):
         grp = self.expr.printExpression()
         return Expression.parathesis("group", grp)
+    
+class Empty(Expression):
+    def printExpression(self):
+        return ""

@@ -1,11 +1,17 @@
+from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.reserved_word import ReservedWord
 from app.lexer.token_types import TokenTypes
-from app.lexer.utils import isValidIdentifierBody, isValidIdentifierStart, isReservedWord, countLine
-import sys
+from app.lexer.utils import (
+    isValidIdentifierBody,
+    isValidIdentifierStart,
+    isReservedWord,
+    countLine,
+)
+
 
 class Scanner:
-    def __init__(self, source, shouldPrint = False):
+    def __init__(self, source, shouldPrint=False):
         self.source = source
         self.tokens = []
         self.upper = len(source)
@@ -13,19 +19,22 @@ class Scanner:
         self.errorStatus = False
         self.shouldPrint = shouldPrint
 
-
     def isAtEnd(self):
         return self.pointer >= self.upper
-
 
     def scanTokens(self):
         while not self.isAtEnd():
             self.scanToken()
-        self.tokens.append(Token(TokenTypes.EOF, "", "null", self.pointer))
+        self.tokens.append(
+            Token(TokenTypes.EOF, "", "null", countLine(self.source, 0, self.pointer) - 2)
+        )
         if self.shouldPrint:
-            print(Token(TokenTypes.EOF, "", "null", self.pointer))
+            print(
+                Token(
+                    TokenTypes.EOF, "", "null", countLine(self.source, 0, self.pointer) - 2
+                )
+            )
         return (self.tokens, self.errorStatus)
-
 
     def scanToken(self):
         char = self.source[self.pointer]
@@ -48,29 +57,19 @@ class Scanner:
             self.generateErrorMsg(char)
         self.pointer += 1
 
-
     def printAndAddToken(self, token, lexeme, literal):
         t = Token(token, lexeme, literal, countLine(self.source, 0, self.pointer))
         if self.shouldPrint:
             print(t)
         self.tokens.append(t)
 
-
     def generateUnclosedString(self):
         line_number = countLine(self.source, 0, self.pointer)
-        print(
-            f"[line {line_number}] Error: Unterminated string.",
-            file=sys.stderr,
-        )
-
+        reportError(line_number, "", "Unterminated String")
 
     def generateErrorMsg(self, char):
         line_number = countLine(self.source, 0, self.pointer)
-        print(
-            f"[line {line_number}] Error: Unexpected character: {char}",
-            file=sys.stderr,
-        )
-
+        reportError(line_number, "", f"Unexpeceted character: {char}")
 
     def processNormal(self, char):
         literal = "null"
@@ -95,7 +94,6 @@ class Scanner:
         elif char == "*":
             token = TokenTypes.STAR
         self.printAndAddToken(token, char, literal)
-
 
     def processEquality(self, char):
         literal = "null"
@@ -133,7 +131,6 @@ class Scanner:
                 token = TokenTypes.GREATER
         self.printAndAddToken(token, char, literal)
 
-
     def processSlash(self, char):
         literal = "null"
         next = self.pointer + 1
@@ -154,7 +151,7 @@ class Scanner:
                 isClose = True
                 break
             next += 1
-            
+
         self.pointer = next
         if not isClose:
             self.errorStatus = True
@@ -163,7 +160,6 @@ class Scanner:
             token = TokenTypes.STRING
             literal = char[1 : len(char) - 1]
             self.printAndAddToken(token, char, literal)
-
 
     def processNumber(self, char):
         self.pointer += 1
@@ -185,12 +181,9 @@ class Scanner:
 
         self.printAndAddToken(token, char, literal)
 
-
     def processAlpha(self, char):
         self.pointer += 1
-        while (not self.isAtEnd()) and isValidIdentifierBody(
-            self.source[self.pointer]
-        ):
+        while (not self.isAtEnd()) and isValidIdentifierBody(self.source[self.pointer]):
             char += self.source[self.pointer]
             self.pointer += 1
 
@@ -203,8 +196,5 @@ class Scanner:
             literal = "null"
         self.printAndAddToken(token, char, literal)
 
-
     def getTokens(self):
         return self.tokens
-    
-

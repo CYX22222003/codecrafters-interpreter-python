@@ -1,5 +1,6 @@
 import sys
 from app.lexer.scanner import Scanner
+from app.parser.expression import Empty
 from app.parser.parser import Parser
 
 def scan(file_contents): 
@@ -30,8 +31,13 @@ def main():
             exit(65)
     elif command == "parse":
         tokens = sc.scanTokens()[0]
+        error = sc.scanTokens()[1]
+        if error:
+            return
         p = Parser(tokens)
         expr = p.parse()
+        if type(expr) == Empty:
+            return 
         print(expr.printExpression())
         
 
