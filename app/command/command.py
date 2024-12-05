@@ -1,3 +1,4 @@
+from app.interpreter.interpreter import Interpreter
 from app.lexer.scanner import Scanner
 from app.parser.parser import Parser
 from app.expression import Empty
@@ -55,5 +56,6 @@ class Evaluate(Command):
         expr = p.parse()
         if type(expr) == Empty:
             exit(65)
-        print(evaluateFormat(expr.evaluateExpression()))
+        int = Interpreter(expr)
+        print(evaluateFormat(int.evaluate()))
     
