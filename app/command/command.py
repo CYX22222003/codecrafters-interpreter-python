@@ -38,7 +38,7 @@ class Parse(Command):
         if error:
             exit(65)
         p = Parser(tokens)
-        expr_xs = p.parseForRun()
+        expr_xs = p.parseForEvaluate()
         if type(expr_xs) == Empty:
             exit(65)
         for expr in expr_xs:
