@@ -52,7 +52,7 @@ def getBinaryOp(token: Token):
         def f(x, y):
             if not isBinaryNumber(x, y):
                 raise LoxRuntimeException(token, "Operands must be numbers.")
-            return x * y
+            return x - y
 
         return f
 
