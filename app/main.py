@@ -16,7 +16,7 @@ def main():
     command = sys.argv[1]
     filename = sys.argv[2]
 
-    if command not in {"tokenize", "parse"}:
+    if command not in {"tokenize", "parse", "evaluate"}:
         print(f"Unknown command: {command}", file=sys.stderr)
         exit(1)
 
@@ -39,6 +39,16 @@ def main():
         if type(expr) == Empty:
             exit(65)
         print(expr.printExpression())
+    elif command == "evaluate":
+        tokens = sc.scanTokens()[0]
+        error = sc.scanTokens()[1]
+        if error:
+            exit(65)
+        p = Parser(tokens)
+        expr = p.parse()
+        if type(expr) == Empty:
+            exit(65)
+        print(expr.evaluateExpression())
         
 
 if __name__ == "__main__":

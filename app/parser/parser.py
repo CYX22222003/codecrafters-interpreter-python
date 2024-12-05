@@ -4,7 +4,6 @@ from app.lexer.token_types import TokenTypes
 from app.parser.expression import Literal, Binary, Expression, Unary, Grouping, Empty
 from app.exception.exceptions import ParseException
 
-
 class Parser:
     def __init__(self, tokens: list[Token]):
         self.tokens = tokens
@@ -20,7 +19,6 @@ class Parser:
         return self.equality()
 
     def equality(self) -> Expression:
-        # print("check equality")
         expr = self.comparison()
         while self.match(TokenTypes.BANG_EQUAL, TokenTypes.EQUAL_EQUAL):
             opr = self.previous()
@@ -67,11 +65,11 @@ class Parser:
 
     def primary(self) -> Expression:
         if self.match(TokenTypes.FALSE):
-            return Literal("false")
+            return Literal(False)
         elif self.match(TokenTypes.TRUE):
-            return Literal("true")
+            return Literal(True)
         elif self.match(TokenTypes.NIL):
-            return Literal("nil")
+            return Literal(None)
 
         elif self.match(TokenTypes.NUMBER, TokenTypes.STRING):
             return Literal(self.previous().literal)
