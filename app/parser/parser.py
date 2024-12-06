@@ -45,7 +45,7 @@ class Parser:
             return self.statement()
         except ParseException:
             self.synchronize()
-            # exit(65)
+            exit(65)
 
     def varDeclare(self):
         name = self.consume(TokenTypes.IDENTIFIER, "Expect variable name.")
