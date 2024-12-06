@@ -30,7 +30,10 @@ class Assign(Expression):
         self.env = env
     
     def evaluateExpression(self):
-        self.env.update(self.name, self.val.evaluateExpression())
+        val = self.val.evaluateExpression()
+        self.env.update(self.name, val)
+        return val
+        
         
     def printExpression(self):
         return Expression.parathesis("assign", self.name.lexeme, self.val.printExpression())
