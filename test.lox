@@ -2,6 +2,7 @@
 print !false;
 var a = "baz" + "hello" + "quz" + "bar" == "bazhelloquzbar";
 var b = 5;
-print(b);
+print;
 var c;
+var hello = "hello world";
 print;

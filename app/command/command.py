@@ -40,6 +40,8 @@ class Parse(Command):
         if error:
             exit(65)
         p = Parser(tokens, self.environment)
+        if p.parseError:
+            exit(65)
         expr_xs = p.parseForEvaluate()
         if type(expr_xs) == Empty:
             exit(65)
@@ -66,6 +68,8 @@ class NormalEvaluate(Evaluate):
         if error:
             exit(65)
         p = Parser(tokens, self.environment)
+        if p.parseError:
+            exit(65)
         expr_xs = p.parseForEvaluate()
         int = Interpreter(expr_xs, self.environment)
         
@@ -85,6 +89,8 @@ class RunEvaluate(Evaluate):
             exit(65)
         p = Parser(tokens, self.environment)
         expr = p.parseForRun()
+        if p.parseError:
+            exit(65)
         int = Interpreter(expr, self.environment)
         
         final = evaluateFormat(int.evaluate())

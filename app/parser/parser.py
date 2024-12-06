@@ -21,6 +21,7 @@ class Parser:
         self.tokens = tokens
         self.current = 0
         self.env = env
+        self.parseError = False
 
     def parseForEvaluate(self) -> list[Expression]:
         try:
@@ -30,13 +31,9 @@ class Parser:
 
     def parseForRun(self) -> list[Expression]:
         statements = []
-        try:
-            while not self.isAtEnd():
-                statements.append(self.declaration())
-            return statements
-        except ParseException:
-            exit(65)
-            # return Empty()
+        while not self.isAtEnd():
+            statements.append(self.declaration())
+        return statements
 
     def declaration(self):
         try:
@@ -44,8 +41,8 @@ class Parser:
                 return self.varDeclare()
             return self.statement()
         except ParseException:
-            self.synchronize()
-            exit(65)
+            self.parseError = True
+            return self.synchronize()
 
     def varDeclare(self):
         name = self.consume(TokenTypes.IDENTIFIER, "Expect variable name.")
@@ -61,10 +58,18 @@ class Parser:
         self.advance()
         while not self.isAtEnd():
             if self.previous().type == TokenTypes.SEMICOLON:
-                return Empty()
-            if self.peek().type == TokenTypes.RETURN:
-                return Empty()
+                return
+            match self.peek().type:
+                case TokenTypes.CLASS: 
+                    return
+                case TokenTypes.FUN:
+                    return
+                case TokenTypes.VAR:
+                    return
+                case TokenTypes.PRINT:
+                    return
             self.advance()
+        return Empty()
 
     def statement(self):
         if self.match(TokenTypes.PRINT):
