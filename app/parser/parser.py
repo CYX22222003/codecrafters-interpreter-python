@@ -3,6 +3,7 @@ from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
 from app.program import (
+    Empty,
     Literal,
     Binary,
     Expression,
@@ -44,13 +45,15 @@ class Parser:
             return self.statement()
         except ParseException:
             self.synchronize()
-            exit(65)
+            # exit(65)
 
     def varDeclare(self):
         name = self.consume(TokenTypes.IDENTIFIER, "Expect variable name.")
         initializer = None
         if self.match(TokenTypes.EQUAL):
             initializer = self.expression()
+        else:
+            initializer = Literal(None)
         self.consume(TokenTypes.SEMICOLON, "Expect ';' after variable declaration")
         return Var(name, initializer, self.env)
 
@@ -58,9 +61,9 @@ class Parser:
         self.advance()
         while not self.isAtEnd():
             if self.previous().type == TokenTypes.SEMICOLON:
-                return
+                return Empty()
             if self.peek().type == TokenTypes.RETURN:
-                return
+                return Empty()
             self.advance()
 
     def statement(self):
