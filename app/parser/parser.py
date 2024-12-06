@@ -3,6 +3,7 @@ from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
 from app.program import (
+    Assign,
     Empty,
     Literal,
     Binary,
@@ -87,7 +88,20 @@ class Parser:
         return expr
 
     def expression(self):
-        return self.equality()
+        return self.assignment()
+    
+    def assignment(self):
+        expr = self.equality()
+        
+        if self.match(TokenTypes.EQUAL):
+            equals = self.previous()
+            value = self.assignment()
+            if type(expr) == Variable:
+                name = expr.name
+                return Assign(name, value, self.env)
+            else:
+                self.error(equals, "Invalid assignment target")
+        return expr
 
     def equality(self) -> Expression:
         expr = self.comparison()

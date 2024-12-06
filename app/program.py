@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from app.environment.environment import Environment
+from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
 from app.interpreter.formatter import evaluateFormat
@@ -22,6 +23,17 @@ class Expression(ABC):
         out += ")"
         return out
 
+class Assign(Expression):
+    def __init__(self, name: Token, value: Expression, env: Environment):
+        self.name = name
+        self.val = value
+        self.env = env
+    
+    def evaluateExpression(self):
+        self.env.update(self.name, self.val.evaluateExpression())
+        
+    def printExpression(self):
+        return Expression.parathesis("assign", self.name.lexeme, self.val.printExpression())
 
 class Variable(Expression):
     def __init__(self, name: Token, env: Environment):

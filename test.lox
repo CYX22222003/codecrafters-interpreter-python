@@ -1,8 +1,13 @@
-(37 + 42 - 21) > (76 - 37) * 2;
+// (37 + 42 - 21) > (76 - 37) * ("hello");
 print !false;
 var a = "baz" + "hello" + "quz" + "bar" == "bazhelloquzbar";
 var b = 5;
-print;
+b = 6;
+print b;
 var c;
 var hello = "hello world";
-print;
+-b;
+print c;
+print (hello + "1");
+
+print "load";
