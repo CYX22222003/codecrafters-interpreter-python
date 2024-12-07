@@ -13,6 +13,7 @@ from app.program import (
     PrintExpression,
     Var,
     Variable,
+    Block
 )
 from app.exception.exceptions import ParseException
 
@@ -35,6 +36,15 @@ class Parser:
         while not self.isAtEnd():
             statements.append(self.declaration())
         return statements
+
+    def block(self):
+        statements = []
+        while (not self.check(TokenTypes.RIGHT_BRACE)
+                and not self.isAtEnd()):
+            statements.append(self.declaration())
+        self.consume(TokenTypes.RIGHT_BRACE, "Expect '}' after block.")
+        return statements
+            
 
     def declaration(self):
         try:
@@ -75,6 +85,8 @@ class Parser:
     def statement(self):
         if self.match(TokenTypes.PRINT):
             return self.printStatement()
+        elif self.match(TokenTypes.LEFT_BRACE):
+            return Block(self.block())
         return self.expressionStatement()
 
     def printStatement(self):

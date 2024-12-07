@@ -1,5 +1,10 @@
-var baz;
-baz = 1;
-print baz;
-print baz = 2;
-print baz;
+var x = 1 / 2 + 3;
+var y = 1 + 2 - 4;
+{
+    var x = 12;
+    {
+        var y = 11111;
+        print z + y;
+    }
+}
+print x + y;

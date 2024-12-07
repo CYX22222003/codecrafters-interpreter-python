@@ -12,7 +12,7 @@ class Interpreter:
         out = None
         try:
             for e in self.exprs:
-                out = e.evaluateExpression()
+                out = e.evaluateExpression(self.environment)
             return out
         except LoxRuntimeException as e:
             reportRuntimeError(e)

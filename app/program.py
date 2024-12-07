@@ -12,7 +12,7 @@ class Expression(ABC):
         pass
 
     @abstractmethod
-    def evaluateExpression(self):
+    def evaluateExpression(self, env=None):
         pass
 
     def parathesis(*items):
@@ -23,17 +23,31 @@ class Expression(ABC):
         out += ")"
         return out
 
+class Block(Expression):
+    def __init__(self, statements: list[Expression]):
+        self.statements = statements
+        self.currentEnv = Environment()
+    
+    def evaluateExpression(self, env=None):
+        self.currentEnv.enclosing = env
+        out = None
+        for statement in self.statements:
+            out = statement.evaluateExpression(self.currentEnv)
+        return out
+    
+    def printExpression(self):
+        return super().printExpression()
+    
 class Assign(Expression):
     def __init__(self, name: Token, value: Expression, env: Environment):
         self.name = name
         self.val = value
         self.env = env
     
-    def evaluateExpression(self):
+    def evaluateExpression(self, env):
         val = self.val.evaluateExpression()
-        self.env.update(self.name, val)
+        env.update(self.name, val)
         return val
-        
         
     def printExpression(self):
         return Expression.parathesis("assign", self.name.lexeme, self.val.printExpression())
@@ -43,8 +57,8 @@ class Variable(Expression):
         self.name = name
         self.env = env
         
-    def evaluateExpression(self):
-        return self.env.get(self.name)
+    def evaluateExpression(self, env):
+        return env.get(self.name)
     
     def printExpression(self):
         return Expression.parathesis("identifier", self.name.lexeme)
@@ -56,8 +70,8 @@ class Var(Expression):
         self.identifier = identifier
         self.env = env
 
-    def evaluateExpression(self):
-        self.env.put(self.name.lexeme, self.identifier.evaluateExpression())
+    def evaluateExpression(self, env):
+        env.put(self.name.lexeme, self.identifier.evaluateExpression(env))
 
     def printExpression(self):
         return Expression.parathesis("var", str(self.identifier.printExpression()))
@@ -67,8 +81,8 @@ class PrintExpression(Expression):
     def __init__(self, expr):
         self.expr = expr
 
-    def evaluateExpression(self):
-        print(evaluateFormat(self.expr.evaluateExpression()))
+    def evaluateExpression(self, env):
+        print(evaluateFormat(self.expr.evaluateExpression(env)))
         return
 
     def printExpression(self):
@@ -86,9 +100,9 @@ class Binary(Expression):
         right_expr = self.right.printExpression()
         return Expression.parathesis(self.token.type.value, left_expr, right_expr)
 
-    def evaluateExpression(self):
-        left = self.left.evaluateExpression()
-        right = self.right.evaluateExpression()
+    def evaluateExpression(self, env):
+        left = self.left.evaluateExpression(env)
+        right = self.right.evaluateExpression(env)
         func = getBinaryOp(self.token)
         return func(left, right)
 
@@ -104,7 +118,7 @@ class Literal(Expression):
             return "nil"
         return str(self.val)
 
-    def evaluateExpression(self):
+    def evaluateExpression(self, env=None):
         return self.val
 
 
@@ -118,9 +132,9 @@ class Unary(Expression):
             self.operator.type.value, self.right.printExpression()
         )
 
-    def evaluateExpression(self):
+    def evaluateExpression(self, env):
         f = getUnaryOp(self.operator)
-        right = self.right.evaluateExpression()
+        right = self.right.evaluateExpression(env)
         return f(right)
 
 
@@ -132,13 +146,13 @@ class Grouping(Expression):
         grp = self.expr.printExpression()
         return Expression.parathesis("group", grp)
 
-    def evaluateExpression(self):
-        return self.expr.evaluateExpression()
+    def evaluateExpression(self, env):
+        return self.expr.evaluateExpression(env)
 
 
 class Empty(Expression):
     def printExpression(self):
         return ""
 
-    def evaluateExpression(self):
-        return super().evaluateExpression()
+    def evaluateExpression(self,env):
+        return super().evaluateExpression(env)
