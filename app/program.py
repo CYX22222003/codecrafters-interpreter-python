@@ -45,7 +45,7 @@ class Assign(Expression):
         self.env = env
     
     def evaluateExpression(self, env):
-        val = self.val.evaluateExpression()
+        val = self.val.evaluateExpression(env)
         env.update(self.name, val)
         return val
         
