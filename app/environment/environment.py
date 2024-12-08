@@ -29,3 +29,6 @@ class Environment:
             return self.enclosing.get(t)    
         raise LoxRuntimeException(t, "Undefined variable '" + t.lexeme + "'.")
     
+    def extend(self, new_enclosse):
+        self.enclosing = new_enclosse
+    

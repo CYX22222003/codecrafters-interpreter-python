@@ -2,7 +2,7 @@ from app.environment.environment import Environment
 from app.interpreter.interpreter import Interpreter
 from app.lexer.scanner import Scanner
 from app.parser.parser import Parser
-from app.program import Empty
+from app.syntax.statement import Empty
 from app.interpreter.formatter import evaluateFormat
 from abc import ABC, abstractmethod
 

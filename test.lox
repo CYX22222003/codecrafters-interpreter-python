@@ -16,3 +16,10 @@ var baz = 23;
 baz = bar;
 bar = baz;
 print bar + baz;
+
+print 1 > 0;
+print "calculated result of bar >= baz";
+print bar >= baz;
+
+print 1 + 2 + 3 + 4 + 5 + 6; 
+print (1011 + 1 == 2);

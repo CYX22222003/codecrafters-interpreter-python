@@ -1,10 +1,10 @@
 from app.environment.environment import Environment
 from app.exception.exceptions import LoxRuntimeException
 from app.exception.utils import reportRuntimeError
-from app.program import Expression
+from app.syntax.statement import Expression, Statement
 
 class Interpreter:
-    def __init__(self, exprs : list[Expression], env: Environment):
+    def __init__(self, exprs : list[Statement], env: Environment):
         self.exprs = exprs
         self.environment = env 
 

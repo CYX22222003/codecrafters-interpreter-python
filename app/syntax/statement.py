@@ -1,18 +1,18 @@
 from abc import ABC, abstractmethod
 from app.environment.environment import Environment
-from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
 from app.interpreter.formatter import evaluateFormat
 
+class Statement(ABC):
+    @abstractmethod
+    def evaluateExpression(self):
+        pass
+    
 
-class Expression(ABC):
+class Expression(Statement):
     @abstractmethod
     def printExpression(self):
-        pass
-
-    @abstractmethod
-    def evaluateExpression(self, env=None):
         pass
 
     def parathesis(*items):
@@ -23,20 +23,18 @@ class Expression(ABC):
         out += ")"
         return out
 
-class Block(Expression):
+class Block(Statement):
     def __init__(self, statements: list[Expression]):
         self.statements = statements
         self.currentEnv = Environment()
     
     def evaluateExpression(self, env=None):
-        self.currentEnv.enclosing = env
+        self.currentEnv.extend(env)
         out = None
         for statement in self.statements:
             out = statement.evaluateExpression(self.currentEnv)
         return out
     
-    def printExpression(self):
-        return super().printExpression()
     
 class Assign(Expression):
     def __init__(self, name: Token, value: Expression, env: Environment):
@@ -64,7 +62,7 @@ class Variable(Expression):
         return Expression.parathesis("identifier", self.name.lexeme)
 
 
-class Var(Expression):
+class Var(Statement):
     def __init__(self, name: Token, identifier: Expression, env: Environment):
         self.name = name
         self.identifier = identifier
@@ -73,20 +71,14 @@ class Var(Expression):
     def evaluateExpression(self, env):
         env.put(self.name.lexeme, self.identifier.evaluateExpression(env))
 
-    def printExpression(self):
-        return Expression.parathesis("var", str(self.identifier.printExpression()))
 
-
-class PrintExpression(Expression):
+class PrintExpression(Statement):
     def __init__(self, expr):
         self.expr = expr
 
     def evaluateExpression(self, env):
         print(evaluateFormat(self.expr.evaluateExpression(env)))
         return
-
-    def printExpression(self):
-        return Expression.parathesis("print", str(self.expr.printExpression()))
 
 
 class Binary(Expression):

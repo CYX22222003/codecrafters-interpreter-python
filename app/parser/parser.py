@@ -2,12 +2,13 @@ from app.environment.environment import Environment
 from app.exception.utils import reportError
 from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
-from app.program import (
+from app.syntax.statement import (
     Assign,
     Empty,
     Literal,
     Binary,
     Expression,
+    Statement,
     Unary,
     Grouping,
     PrintExpression,
@@ -31,7 +32,7 @@ class Parser:
         except ParseException:
             exit(65)
 
-    def parseForRun(self) -> list[Expression]:
+    def parseForRun(self) -> list[Statement]:
         statements = []
         while not self.isAtEnd():
             statements.append(self.declaration())
