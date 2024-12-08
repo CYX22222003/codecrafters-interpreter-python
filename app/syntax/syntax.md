@@ -12,7 +12,9 @@ exprStmt       → expression ";" ;
 printStmt      → "print" expression ";" ;
 expression     → assignment ;
 assignment     → IDENTIFIER "=" assignment
-               | equality ;
+               | logical_or;
+logical_or     → logic_and ("or" logic_and)*
+logic_and      → equality ("and" equality)* 
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
 comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;

@@ -24,9 +24,13 @@ if (bar > baz) {
 
 var a;
 a = 101;
-if (a > 100) {
-    print "a is greater than 100";
+if (a > 120) {
+    print "a is greater than 120";
+} else if (a >= 100 and a <= 120) {
+    print "a is between 100 and 120";
 } else {
-    print "a is not greater than 100";
+    print "a is less than 100";
 }
 print "test done";
+
+if (false) print "if branch"; else if (true) print "else-if branch";

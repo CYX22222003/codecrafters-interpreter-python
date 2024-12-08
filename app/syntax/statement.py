@@ -3,6 +3,7 @@ from app.environment.environment import Environment
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
 from app.interpreter.formatter import evaluateFormat
+from app.lexer.token_types import TokenTypes
 
 
 class Statement(ABC):
@@ -72,6 +73,27 @@ class PrintExpression(Statement):
     def evaluateExpression(self, env):
         print(evaluateFormat(self.expr.evaluateExpression(env)))
         return
+    
+    
+class Logical(Expression):
+    def __init__(self, left : Expression, operator: Token, right: Expression):
+        self.left = left
+        self.operator = operator
+        self.right = right
+        
+    def printExpression(self):
+        return super().printExpression();
+    
+    def evaluateExpression(self, env=None):
+        leftCond = self.left.evaluateExpression(env)
+        if self.operator.type == TokenTypes.OR:
+            if leftCond:
+                return leftCond
+            return self.right.evaluateExpression(env)
+        else:
+            if not leftCond:
+                return leftCond
+            return self.right.evaluateExpression(env)
 
 
 class Assign(Expression):

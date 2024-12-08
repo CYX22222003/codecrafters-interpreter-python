@@ -9,6 +9,7 @@ from app.syntax.statement import (
     Literal,
     Binary,
     Expression,
+    Logical,
     Statement,
     Unary,
     Grouping,
@@ -95,7 +96,7 @@ class Parser:
         self.consume(TokenTypes.LEFT_PAREN, "Expect '(' after if")
         condition = self.expression()
         self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after if condition")
-        
+
         thenBranch = self.statement()
         elseBranch = None
         if self.match(TokenTypes.ELSE):
@@ -116,7 +117,7 @@ class Parser:
         return self.assignment()
 
     def assignment(self):
-        expr = self.equality()
+        expr = self.orOperation()
 
         if self.match(TokenTypes.EQUAL):
             equals = self.previous()
@@ -126,6 +127,24 @@ class Parser:
                 return Assign(name, value, self.env)
             else:
                 self.error(equals, "Invalid assignment target")
+        return expr
+
+    def orOperation(self):
+        expr = self.andOperation()
+
+        while self.match(TokenTypes.OR):
+            operator = self.previous()
+            right = self.andOperation()
+            expr = Logical(expr, operator, right)
+        return expr
+
+    def andOperation(self):
+        expr = self.equality()
+
+        while self.match(TokenTypes.AND):
+            operator = self.previous()
+            right = self.equality()
+            expr = Logical(expr, operator, right)
         return expr
 
     def equality(self) -> Expression:
