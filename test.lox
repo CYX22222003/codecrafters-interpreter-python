@@ -32,5 +32,5 @@ if (a > 120) {
     print "a is less than 100";
 }
 print "test done";
-
+print nil and "ok";
 if (false) print "if branch"; else if (true) print "else-if branch";
