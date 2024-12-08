@@ -7,7 +7,7 @@ from app.interpreter.formatter import evaluateFormat
 
 class Statement(ABC):
     @abstractmethod
-    def evaluateExpression(self):
+    def evaluateExpression(self, env=None):
         pass
 
 
@@ -23,6 +23,23 @@ class Expression(Statement):
         out = out.strip()
         out += ")"
         return out
+
+
+class If(Statement):
+    def __init__(
+        self, condition: Expression, thenBranch: Statement, elseBranch: Statement
+    ):
+        self.condition = condition
+        self.thenBranch = thenBranch
+        self.elseBranch = elseBranch
+        
+    def evaluateExpression(self, env):
+        if self.condition.evaluateExpression(env):
+            return self.thenBranch.evaluateExpression(env)
+        elif self.elseBranch is not None:
+            return self.elseBranch.evaluateExpression(env)
+        else:
+            return
 
 
 class Block(Statement):

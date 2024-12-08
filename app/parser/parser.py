@@ -5,6 +5,7 @@ from app.lexer.token_types import TokenTypes
 from app.syntax.statement import (
     Assign,
     Empty,
+    If,
     Literal,
     Binary,
     Expression,
@@ -14,7 +15,7 @@ from app.syntax.statement import (
     PrintExpression,
     Var,
     Variable,
-    Block
+    Block,
 )
 from app.exception.exceptions import ParseException
 
@@ -40,12 +41,10 @@ class Parser:
 
     def block(self):
         statements = []
-        while (not self.check(TokenTypes.RIGHT_BRACE)
-                and not self.isAtEnd()):
+        while not self.check(TokenTypes.RIGHT_BRACE) and not self.isAtEnd():
             statements.append(self.declaration())
         self.consume(TokenTypes.RIGHT_BRACE, "Expect '}' after block.")
         return statements
-            
 
     def declaration(self):
         try:
@@ -72,7 +71,7 @@ class Parser:
             if self.previous().type == TokenTypes.SEMICOLON:
                 return
             match self.peek().type:
-                case TokenTypes.CLASS: 
+                case TokenTypes.CLASS:
                     return
                 case TokenTypes.FUN:
                     return
@@ -88,7 +87,20 @@ class Parser:
             return self.printStatement()
         elif self.match(TokenTypes.LEFT_BRACE):
             return Block(self.block())
+        elif self.match(TokenTypes.IF):
+            return self.ifStatement()
         return self.expressionStatement()
+
+    def ifStatement(self):
+        self.consume(TokenTypes.LEFT_PAREN, "Expect '(' after if")
+        condition = self.expression()
+        self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after if condition")
+        
+        thenBranch = self.statement()
+        elseBranch = None
+        if self.match(TokenTypes.ELSE):
+            elseBranch = self.statement()
+        return If(condition, thenBranch, elseBranch)
 
     def printStatement(self):
         expr = self.expression()
@@ -102,10 +114,10 @@ class Parser:
 
     def expression(self):
         return self.assignment()
-    
+
     def assignment(self):
         expr = self.equality()
-        
+
         if self.match(TokenTypes.EQUAL):
             equals = self.previous()
             value = self.assignment()
