@@ -4,11 +4,12 @@ from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp
 from app.interpreter.formatter import evaluateFormat
 
+
 class Statement(ABC):
     @abstractmethod
     def evaluateExpression(self):
         pass
-    
+
 
 class Expression(Statement):
     @abstractmethod
@@ -23,43 +24,18 @@ class Expression(Statement):
         out += ")"
         return out
 
+
 class Block(Statement):
     def __init__(self, statements: list[Expression]):
         self.statements = statements
         self.currentEnv = Environment()
-    
+
     def evaluateExpression(self, env=None):
         self.currentEnv.extend(env)
         out = None
         for statement in self.statements:
             out = statement.evaluateExpression(self.currentEnv)
         return out
-    
-    
-class Assign(Expression):
-    def __init__(self, name: Token, value: Expression, env: Environment):
-        self.name = name
-        self.val = value
-        self.env = env
-    
-    def evaluateExpression(self, env):
-        val = self.val.evaluateExpression(env)
-        env.update(self.name, val)
-        return val
-        
-    def printExpression(self):
-        return Expression.parathesis("assign", self.name.lexeme, self.val.printExpression())
-
-class Variable(Expression):
-    def __init__(self, name: Token, env: Environment):
-        self.name = name
-        self.env = env
-        
-    def evaluateExpression(self, env):
-        return env.get(self.name)
-    
-    def printExpression(self):
-        return Expression.parathesis("identifier", self.name.lexeme)
 
 
 class Var(Statement):
@@ -79,6 +55,35 @@ class PrintExpression(Statement):
     def evaluateExpression(self, env):
         print(evaluateFormat(self.expr.evaluateExpression(env)))
         return
+
+
+class Assign(Expression):
+    def __init__(self, name: Token, value: Expression, env: Environment):
+        self.name = name
+        self.val = value
+        self.env = env
+
+    def evaluateExpression(self, env):
+        val = self.val.evaluateExpression(env)
+        env.update(self.name, val)
+        return val
+
+    def printExpression(self):
+        return Expression.parathesis(
+            "assign", self.name.lexeme, self.val.printExpression()
+        )
+
+
+class Variable(Expression):
+    def __init__(self, name: Token, env: Environment):
+        self.name = name
+        self.env = env
+
+    def evaluateExpression(self, env):
+        return env.get(self.name)
+
+    def printExpression(self):
+        return Expression.parathesis("identifier", self.name.lexeme)
 
 
 class Binary(Expression):
@@ -146,5 +151,5 @@ class Empty(Expression):
     def printExpression(self):
         return ""
 
-    def evaluateExpression(self,env):
+    def evaluateExpression(self, env):
         return super().evaluateExpression(env)
