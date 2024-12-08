@@ -7,8 +7,12 @@ statement      → exprStmt
                | ifStmt
                | printStmt 
                | whileStmt
+               | forStmt
                | block;
 
+forStmt        → "for" "(" (varDecl | exprStmt | ";") 
+                expression? ";"
+                expression?")" statement;
 whileStmt      → "while" "(" expression ")" statement;
 ifStmt         → "if" "(" expression ")" statement ("else" statement)?;
 block          → "{" declaration* "}";

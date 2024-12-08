@@ -37,6 +37,13 @@ class While(Statement):
             out = self.body.evaluateExpression(env)
         return out
 
+# No need. Will use syntatic sugar to rewrite for loop into while loop
+# class For(Statement):
+#    def __init__(self, initializer : Statement, cond: Expression, increment: Expression):
+#        self.initializer = initializer
+#        self.cond = cond
+#         self.increment = self.increment            
+
 
 class If(Statement):
     def __init__(
