@@ -65,12 +65,6 @@ def getBinaryOp(token: Token):
 
         return divide
 
-    elif token.type == TokenTypes.AND:
-        return lambda x, y: x and y
-
-    elif token.type == TokenTypes.OR:
-        return lambda x, y: x or y
-
     elif token.type == TokenTypes.LESS:
 
         def f(x, y):
@@ -129,3 +123,6 @@ def isBinaryNumber(x, y):
 
 def isBinaryString(x, y):
     return type(x) == str and type(y) == str
+
+def isTruthy(x):
+    return x != False and x != None

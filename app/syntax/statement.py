@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from app.environment.environment import Environment
 from app.lexer.token import Token
-from app.interpreter.utils import getBinaryOp, getUnaryOp
+from app.interpreter.utils import getBinaryOp, getUnaryOp, isTruthy
 from app.interpreter.formatter import evaluateFormat
 from app.lexer.token_types import TokenTypes
 
@@ -87,11 +87,11 @@ class Logical(Expression):
     def evaluateExpression(self, env=None):
         leftCond = self.left.evaluateExpression(env)
         if self.operator.type == TokenTypes.OR:
-            if leftCond:
+            if isTruthy(leftCond):
                 return leftCond
             return self.right.evaluateExpression(env)
         else:
-            if not leftCond:
+            if not isTruthy(leftCond):
                 return leftCond
             return self.right.evaluateExpression(env)
 
