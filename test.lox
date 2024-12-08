@@ -36,3 +36,10 @@ print nil and "ok";
 print "" and "ok!";
 
 if (false) print "if branch"; else if (true) print "else-if branch";
+
+var count = 10;
+while (count > 0) {
+    // count = count - 1;
+    print "countdown "; print count; 
+    count = count - 1;
+}

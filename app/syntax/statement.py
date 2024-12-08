@@ -26,6 +26,18 @@ class Expression(Statement):
         return out
 
 
+class While(Statement):
+    def __init__(self, condition: Expression, body: Statement):
+        self.condition = condition
+        self.body = body
+    
+    def evaluateExpression(self, env=None):
+        out = None
+        while isTruthy(self.condition.evaluateExpression(env)):
+            out = self.body.evaluateExpression(env)
+        return out
+
+
 class If(Statement):
     def __init__(
         self, condition: Expression, thenBranch: Statement, elseBranch: Statement

@@ -17,6 +17,7 @@ from app.syntax.statement import (
     Var,
     Variable,
     Block,
+    While,
 )
 from app.exception.exceptions import ParseException
 
@@ -90,6 +91,8 @@ class Parser:
             return Block(self.block())
         elif self.match(TokenTypes.IF):
             return self.ifStatement()
+        elif self.match(TokenTypes.WHILE):
+            return self.whileStatement()
         return self.expressionStatement()
 
     def ifStatement(self):
@@ -102,6 +105,13 @@ class Parser:
         if self.match(TokenTypes.ELSE):
             elseBranch = self.statement()
         return If(condition, thenBranch, elseBranch)
+    
+    def whileStatement(self):
+        self.consume(TokenTypes.LEFT_PAREN, "Expect '(' after while.")
+        condition = self.expression()
+        self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after condition")
+        body = self.statement()
+        return While(condition, body)
 
     def printStatement(self):
         expr = self.expression()
