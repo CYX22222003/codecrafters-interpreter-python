@@ -1,6 +1,6 @@
 from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
-
+import time
 
 class Environment:
     def __init__(self, env = None):
@@ -31,4 +31,9 @@ class Environment:
     
     def extend(self, new_enclosse):
         self.enclosing = new_enclosse
-    
+
+class Global(Environment):
+    def __init__(self):
+        self.values = {"clock" : lambda : time.time()}
+        self.hashSet = {"clock"}
+        self.enclosing = None

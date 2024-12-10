@@ -4,6 +4,7 @@ from app.lexer.token import Token
 from app.lexer.token_types import TokenTypes
 from app.syntax.statement import (
     Assign,
+    Call,
     Empty,
     If,
     Literal,
@@ -232,8 +233,26 @@ class Parser:
             opr = self.previous()
             right = self.unary()
             return Unary(opr, right)
-        return self.primary()
-
+        return self.call()
+    
+    def call(self):
+        expr = self.primary()
+        while True:
+            if self.match(TokenTypes.LEFT_PAREN):
+                expr = self.finishCall(expr)
+            else:
+                break
+        return expr
+    
+    def finishCall(self, callee):
+        arguments = []
+        while not self.check(TokenTypes.RIGHT_PAREN):
+            arguments.append(self.expression())
+            if not self.match(TokenTypes.COMMA):
+                break
+        paren = self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after arguments.")
+        return Call(callee, paren, arguments)
+            
     def primary(self) -> Expression:
         if self.match(TokenTypes.FALSE):
             return Literal(False)

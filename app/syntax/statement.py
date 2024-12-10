@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
+from typing import Callable
 from app.environment.environment import Environment
+from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp, isTruthy
 from app.interpreter.formatter import evaluateFormat
@@ -24,7 +26,6 @@ class Expression(Statement):
         out = out.strip()
         out += ")"
         return out
-
 
 class While(Statement):
     def __init__(self, condition: Expression, body: Statement):
@@ -211,3 +212,27 @@ class Empty(Expression):
 
     def evaluateExpression(self, env):
         return super().evaluateExpression(env)
+
+class Call(Expression):
+    def __init__(self, callee: Expression, paren: Token, arguments: list[Expression]):
+        self.callee = callee
+        self.paren = paren
+        self.arguments = arguments
+    
+    def printExpression(self):
+        return super().printExpression()
+    
+    def evaluateExpression(self, env=None):
+        f = self.callee.evaluateExpression(env)
+        arguments  = []
+        for expr in self.arguments:
+            arguments.append(expr.evaluateExpression(env))
+        if not callable(f):
+            raise LoxRuntimeException(self.paren, f"Can only call functions and classes. Received type {type(f)}")
+        
+        try:
+            out = f(*arguments)
+        except TypeError as e:
+            raise LoxRuntimeException(self.paren, str(e))
+        
+        return out

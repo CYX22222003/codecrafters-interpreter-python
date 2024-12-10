@@ -47,3 +47,5 @@ while (count > 0) {
 for (var c = 0; c < 10; c = c + 2) {
     print c + 1;
 }
+
+print clock();
