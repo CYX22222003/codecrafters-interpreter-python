@@ -273,5 +273,6 @@ class Call(Expression):
         try:
             out = f(*arguments)
         except TypeError as e:
+            exit(65)
             raise LoxRuntimeException(self.paren, str(e))
         return out
