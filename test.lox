@@ -1,5 +1,6 @@
 // function declaration
 // with and without arguments
+// Does not support lambda
 fun fib(n) {
     if (n == 1 or n == 2) {
         return n;
