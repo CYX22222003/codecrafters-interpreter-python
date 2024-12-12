@@ -2,6 +2,9 @@ from app.environment.predefined import indexAt, makeList, scanin, toint, tostr, 
 from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
 import time
+import copy
+
+from app.lexer.token_types import TokenTypes
 
 
 class Environment:
@@ -11,6 +14,10 @@ class Environment:
         self.enclosing = env
 
     def put(self, name: str, val):
+        if name in self.hashSet:
+            print(
+                #Token(TokenTypes.IDENTIFIER, name, None, -1),
+                f"Cannot redeclare of {name} at this environment")
         self.values[name] = val
         self.hashSet.add(name)
 
@@ -42,9 +49,9 @@ class Global(Environment):
             "scanin": scanin,
             "toint": toint,
             "tostr": tostr,
-            "makeList" : makeList,
-            "indexAt" : indexAt,
-            "xsLength" : xsLength
+            "makeList": makeList,
+            "indexAt": indexAt,
+            "xsLength": xsLength,
         }
         self.hashSet = set(self.values.keys())
         self.enclosing = None

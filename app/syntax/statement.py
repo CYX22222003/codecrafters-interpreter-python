@@ -6,7 +6,7 @@ from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp, isTruthy
 from app.interpreter.formatter import evaluateFormat
 from app.lexer.token_types import TokenTypes
-
+import copy
 
 class Statement(ABC):
     @abstractmethod
@@ -45,28 +45,28 @@ class Function(Statement):
         self.name = name
         self.params = params
         self.body = body 
+        self.enclosing = None
     
     def evaluateExpression(self, env=None):
+        # right pointer back to environment that creates the current frame
+        self.enclosing = env;
         def f(*args):
             curEnv = Environment()
-            curEnv.extend(env)
-            
-            # print("current environment of function executed: " + str(curEnv))
-
+            curEnv.extend(self.enclosing)
             for i in range(len(args)):
                 curEnv.put(self.params[i].lexeme, args[i])
-            # print("Environment diagram: ", curEnv.values)
-            out = None
-            for b in self.body:
-                try:
-                    out = b.evaluateExpression(curEnv)
-                except ReturnException as r:
-                    curEnv = None
-                    return r.value
-            curEnv = None
-            return out
         
+            out = None
+            try:
+                for b in self.body:
+                    out = b.evaluateExpression(curEnv)
+            except ReturnException as r:
+                return r.value.evaluateExpression(curEnv)
+            return out
+        # print("declare function ", self.name.lexeme)
+        # print("")
         env.put(self.name.lexeme, f)
+        f.__name__ = self.name.lexeme
         return
         
 class Return(Statement):
@@ -75,8 +75,7 @@ class Return(Statement):
         self.value = value
         
     def evaluateExpression(self, env=None):
-        out = self.value.evaluateExpression(env)
-        raise ReturnException(out)
+        raise ReturnException(self.value)
         
         
         
@@ -117,6 +116,7 @@ class Var(Statement):
         self.env = env
 
     def evaluateExpression(self, env):
+        # print(f"Attempt to declare new variable {self.name.lexeme} at environment {id(env)}")
         env.put(self.name.lexeme, self.identifier.evaluateExpression(env))
 
 
@@ -258,10 +258,12 @@ class Call(Expression):
         return super().printExpression()
 
     def evaluateExpression(self, env=None):
-        f = self.callee.evaluateExpression(env)
+        curEnv = Environment()
+        curEnv.extend(env)
+        f = self.callee.evaluateExpression(curEnv)
         arguments = []
         for expr in self.arguments:
-            arguments.append(expr.evaluateExpression(env))
+            arguments.append(expr.evaluateExpression(curEnv))
         if not callable(f):
             raise LoxRuntimeException(
                 self.paren,
