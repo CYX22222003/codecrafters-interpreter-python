@@ -14,7 +14,16 @@ class Interpreter:
         try:
             for e in self.exprs:
                 out = e.evaluateExpression(self.environment)
+            #self.traceEnv(self.environment)
             return out
         except LoxRuntimeException as e:
             reportRuntimeError(e)
             exit(70)
+            
+    def traceEnv(self, env):
+        if env == None:
+            return 
+        else:
+            print(id(env), env.values)
+            for e in env.children:
+                self.traceEnv(e)

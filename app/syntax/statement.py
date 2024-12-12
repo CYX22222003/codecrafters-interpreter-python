@@ -6,7 +6,6 @@ from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp, isTruthy
 from app.interpreter.formatter import evaluateFormat
 from app.lexer.token_types import TokenTypes
-import copy
 
 class Statement(ABC):
     @abstractmethod
@@ -45,28 +44,31 @@ class Function(Statement):
         self.name = name
         self.params = params
         self.body = body 
-        self.enclosing = None
     
     def evaluateExpression(self, env=None):
         # right pointer back to environment that creates the current frame
-        self.enclosing = env;
         def f(*args):
+            # print(f"Executing with enclosing environment \n{env.values},\n {env.enclosing.values}\n")
             curEnv = Environment()
-            curEnv.extend(self.enclosing)
+            curEnv.extend(env)
             if len(args) != len(self.params):
                 raise LoxRuntimeException(self.name, "Wrong number of parameters")
+            
             for i in range(len(args)):
                 curEnv.put(self.params[i].lexeme, args[i])
-        
-            out = None
+
+            out = Empty()
+            bodyEnv = Environment()
+            bodyEnv.extend(curEnv)
+            
             try:
                 for b in self.body:
-                    out = b.evaluateExpression(curEnv)
+                    out = b.evaluateExpression(bodyEnv)
+                    # print(f"Current environment while evaluating:\n {bodyEnv.values},\n {bodyEnv.enclosing.values}\n")
             except ReturnException as r:
-                return r.value.evaluateExpression(curEnv)
+                out = r.value.evaluateExpression(bodyEnv)
             return out
-        # print("declare function ", self.name.lexeme)
-        # print("")
+        
         env.put(self.name.lexeme, f)
         f.__name__ = self.name.lexeme
         return
@@ -273,8 +275,8 @@ class Call(Expression):
             )
 
         try:
+            # print(f"Executing function with id {f}")
             out = f(*arguments)
         except TypeError as e:
-            # exit(65)
             raise LoxRuntimeException(self.paren, str(e))
         return out

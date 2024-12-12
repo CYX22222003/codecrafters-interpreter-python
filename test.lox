@@ -1,52 +1,14 @@
-// function declaration
-// with and without arguments
-// Does not support lambda
-// F
-fun fib(n) {
-    if (n == 1 or n == 2) {
-        return n;
-    } else {
-        return fib(n - 1) + fib(n - 2);
+fun makeFilter(min) {
+    fun filter() {
+        print min;
     }
+    return filter;
 }
 
-fun fib2(n) {
-    if (n == 1 or n == 2) {
-        return n;
-    }
-    return fib(n - 1) + fib(n - 2);
-}
+//var a = 5;
+//var b = 6;
+var greaterThanX = makeFilter(5);
+var greaterThanY = makeFilter(6);
 
-fun fib3(n) {
-    if (n == 1 or n == 2) {
-        return n;
-    }
-    var out1 = fib(n - 1);
-    var out2 = fib(n - 2);
-    return out1 + out2;
-}
-
-var a = toint(scanin("value of a: "));
-print fib3(a);
-
-fun start_from(x) {
-    fun tail() {
-        return start_from(x + 1);
-    }
-    return makeList(x, tail);
-}
-
-fun stream_tail(st) {
-    return indexAt(st, 1)();
-}
-
-var st1 = start_from(0);
-for (var k = 0; k < 10; k = k + 1) {
-    print indexAt(stream_tail(st1), 0);
-    //print(st1);
-}
-
-print start_from;
-fun f(a, b, c, d) {
-    return;
-}
+greaterThanX();
+greaterThanY();

@@ -2,9 +2,6 @@ from app.environment.predefined import indexAt, makeList, scanin, toint, tostr, 
 from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
 import time
-import copy
-
-from app.lexer.token_types import TokenTypes
 
 
 class Environment:
@@ -12,6 +9,7 @@ class Environment:
         self.values = {}
         self.hashSet = set({})
         self.enclosing = env
+        self.children = []
 
     def put(self, name: str, val):
         self.values[name] = val
@@ -36,18 +34,20 @@ class Environment:
 
     def extend(self, new_enclosse):
         self.enclosing = new_enclosse
+        new_enclosse.children.append(self)
 
 
 class Global(Environment):
     def __init__(self):
         self.values = {
-            "clock": lambda: time.time(),
-            "scanin": scanin,
-            "toint": toint,
-            "tostr": tostr,
-            "makeList": makeList,
-            "indexAt": indexAt,
-            "xsLength": xsLength,
+            # "clock": lambda: time.time(),
+            # "scanin": scanin,
+            # "toint": toint,
+            # "tostr": tostr,
+            # "makeList": makeList,
+            # "indexAt": indexAt,
+            # "xsLength": xsLength,
         }
         self.hashSet = set(self.values.keys())
         self.enclosing = None
+        self.children = []
