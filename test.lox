@@ -50,5 +50,3 @@ print start_from;
 fun f(a, b, c, d) {
     return;
 }
-
-f(1,2,3,4);
