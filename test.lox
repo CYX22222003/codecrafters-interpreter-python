@@ -47,4 +47,8 @@ for (var k = 0; k < 10; k = k + 1) {
 }
 
 print start_from;
-fun f(a, b, c, d) {}
+fun f(a, b, c, d) {
+    return;
+}
+
+f(1,2,3,4);

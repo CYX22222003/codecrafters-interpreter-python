@@ -124,7 +124,7 @@ class Parser:
     
     def returnStatement(self):
         keyword = self.previous()
-        value = None
+        value = Empty()
         if not self.check(TokenTypes.SEMICOLON):
             value = self.expression()
         self.consume(TokenTypes.SEMICOLON, "Expect ; after return value.")
