@@ -14,10 +14,6 @@ class Environment:
         self.enclosing = env
 
     def put(self, name: str, val):
-        if name in self.hashSet:
-            print(
-                #Token(TokenTypes.IDENTIFIER, name, None, -1),
-                f"Cannot redeclare of {name} at this environment")
         self.values[name] = val
         self.hashSet.add(name)
 
