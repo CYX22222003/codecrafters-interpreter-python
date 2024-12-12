@@ -53,6 +53,8 @@ class Function(Statement):
         def f(*args):
             curEnv = Environment()
             curEnv.extend(self.enclosing)
+            if len(args) != len(self.params):
+                raise LoxRuntimeException(self.name, "Wrong number of parameters")
             for i in range(len(args)):
                 curEnv.put(self.params[i].lexeme, args[i])
         
@@ -273,6 +275,6 @@ class Call(Expression):
         try:
             out = f(*arguments)
         except TypeError as e:
-            exit(65)
+            # exit(65)
             raise LoxRuntimeException(self.paren, str(e))
         return out

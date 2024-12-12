@@ -42,7 +42,9 @@ fun stream_tail(st) {
 var st1 = start_from(0);
 for (var k = 0; k < 10; k = k + 1) {
     print indexAt(stream_tail(st1), 0);
-    print(st1);
+    //print(st1);
 }
 
 print start_from;
+
+fib3();
