@@ -1,3 +1,4 @@
+//function declaration
 fun fib(n) {
     if (n == 1 or n == 2) {
         return n;
