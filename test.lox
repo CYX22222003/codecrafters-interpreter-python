@@ -46,5 +46,4 @@ for (var k = 0; k < 10; k = k + 1) {
 }
 
 print start_from;
-
-fib3();
+fun f(a, b, c, d) {}

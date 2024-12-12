@@ -66,9 +66,14 @@ class Parser:
         name = self.consume(TokenTypes.IDENTIFIER, f"Expect {msg} name.")
         self.consume(TokenTypes.LEFT_PAREN, f"Expect '(' after {msg} name.")
         params = []
-        while not self.check(TokenTypes.RIGHT_PAREN):
-            params.append(self.consume(TokenTypes.IDENTIFIER, "Expect parameter name."))
-            self.match(TokenTypes.COMMA)
+        if not self.check(TokenTypes.RIGHT_PAREN):
+            while True: 
+                if len(params) >= 255:
+                    self.error(self.peek(), "Can't have more than 255 parameters")
+            
+                params.append(self.consume(TokenTypes.IDENTIFIER, "Expect parameter name."))
+                if not self.match(TokenTypes.COMMA):
+                    break
         self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after parameters.")
         
         self.consume(TokenTypes.LEFT_BRACE, "Expect '{' before " + msg + " body")
