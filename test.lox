@@ -12,4 +12,31 @@ var greaterThanY = makeFilter(6);
 
 greaterThanX();
 greaterThanY();
-900();
+
+var count = 3;
+
+fun tick() {
+  if (count > 0) {
+    print count;
+    count = count - 1;
+    return false;
+  }
+  print "Blast off!";
+  return true;
+}
+
+while (!tick()) {}
+
+fun makeCounter() {
+  var i = 0;
+  fun count() {
+    i = i + 1;
+    print i;
+  }
+
+  return count;
+}
+
+var counter = makeCounter();
+counter();
+counter();
