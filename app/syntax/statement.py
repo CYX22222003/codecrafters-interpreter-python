@@ -46,9 +46,7 @@ class Function(Statement):
         self.body = body 
     
     def evaluateExpression(self, env=None):
-        # right pointer back to environment that creates the current frame
         def f(*args):
-            # print(f"Executing with enclosing environment \n{env.values},\n {env.enclosing.values}\n")
             curEnv = Environment()
             curEnv.extend(env)
             if len(args) != len(self.params):
@@ -64,7 +62,6 @@ class Function(Statement):
             try:
                 for b in self.body:
                     out = b.evaluateExpression(bodyEnv)
-                    # print(f"Current environment while evaluating:\n {bodyEnv.values},\n {bodyEnv.enclosing.values}\n")
             except ReturnException as r:
                 out = r.value.evaluateExpression(bodyEnv)
             return out
@@ -120,7 +117,6 @@ class Var(Statement):
         self.env = env
 
     def evaluateExpression(self, env):
-        # print(f"Attempt to declare new variable {self.name.lexeme} at environment {id(env)}")
         env.put(self.name.lexeme, self.identifier.evaluateExpression(env))
 
 
@@ -275,7 +271,6 @@ class Call(Expression):
             )
 
         try:
-            # print(f"Executing function with id {f}")
             out = f(*arguments)
         except TypeError as e:
             raise LoxRuntimeException(self.paren, str(e))
