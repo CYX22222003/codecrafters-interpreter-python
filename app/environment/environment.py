@@ -40,13 +40,13 @@ class Environment:
 class Global(Environment):
     def __init__(self):
         self.values = {
-            # "clock": lambda: time.time(),
-            # "scanin": scanin,
-            # "toint": toint,
-            # "tostr": tostr,
-            # "makeList": makeList,
-            # "indexAt": indexAt,
-            # "xsLength": xsLength,
+            "clock": lambda: time.time(),
+            "scanin": scanin,
+            "toint": toint,
+            "tostr": tostr,
+            "makeList": makeList,
+            "indexAt": indexAt,
+            "xsLength": xsLength,
         }
         self.hashSet = set(self.values.keys())
         self.enclosing = None
