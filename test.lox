@@ -1,61 +1,67 @@
-var x = 1 / 2 + 3;
-var y = 1 + 2 - 4;
-{
-    var x = 12;
-    {
-        var y = 11111;
-        print x + y;
+// var x = 1 / 2 + 3;
+// var y = 1 + 2 - 4;
+// {
+//     var x = 12;
+//     {
+//         var y = 11111;
+//         print x + y;
+//     }
+// }
+// print x + y;
+
+// var bar = 23;
+// // [tester::#PL3] [test-2] [test.lox] 
+// var baz = 23;
+// // [tester::#PL3] [test-2] [test.lox] 
+// baz = bar;
+// bar = baz;
+// if (bar > baz) {
+//     print bar + baz;
+// } else {
+//     print "aiyo";
+//     print "this is incorrect";
+// }
+
+// var a;
+// a = 101;
+// if (a > 120) {
+//     print "a is greater than 120";
+// } else if (a >= 100 and a <= 120) {
+//     print "a is between 100 and 120";
+// } else {
+//     print "a is less than 100";
+// }
+// print "test done";
+
+fun iter(a) {
+    if (a == 0) {
+        return 0;
+    } 
+    return a + iter(a - 1);
+}
+
+fun factorial(n) {
+    if (n == 0) {
+        return 1;
+    }
+    return n * factorial(n - 1);
+}
+
+fun fib(n) {
+    if (n == 0 or n == 1) {
+        return 1;
+    } else {
+        return fib(n - 1) + fib(n - 2);
     }
 }
-print x + y;
 
-var bar = 23;
-// [tester::#PL3] [test-2] [test.lox] 
-var baz = 23;
-// [tester::#PL3] [test-2] [test.lox] 
-baz = bar;
-bar = baz;
-if (bar > baz) {
-    print bar + baz;
-} else {
-    print "aiyo";
-    print "this is incorrect";
-}
+print "iter outcome";
+var a = toint(scanin("value of a: "));
+print iter(a);
+print toint(a * (a + 1) / 2);
 
-var a;
-a = 101;
-if (a > 120) {
-    print "a is greater than 120";
-} else if (a >= 100 and a <= 120) {
-    print "a is between 100 and 120";
-} else {
-    print "a is less than 100";
-}
-print "test done";
-print nil and "ok";
-print "" and "ok!";
+print "factorial outcome";
+print factorial(a);
 
-if (false) print "if branch"; else if (true) print "else-if branch";
-
-var count = 10;
-while (count > 0) {
-    // count = count - 1;
-    print "countdown "; print count; 
-    count = count - 1;
-}
-
-for (var c = 0; c < 10; c = c + 2) {
-    print c + 1;
-}
-
-print clock();
-
-var k = scanin("key in value of k: ");
-var m = scanin("value of m: ");
-print k + m;
-print(toint(k) + toint(m));
-var xs = makeList(1,4,5,6,7,6,7,8,10);
-print "";
-for (var i = 0; i < xsLength(xs); i = i + 1) {
-    print indexAt(xs, i) + 1;
-}
+print "fibonacci outcome";
+print fib(a);

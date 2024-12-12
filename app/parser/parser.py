@@ -6,11 +6,13 @@ from app.syntax.statement import (
     Assign,
     Call,
     Empty,
+    Function,
     If,
     Literal,
     Binary,
     Expression,
     Logical,
+    Return,
     Statement,
     Unary,
     Grouping,
@@ -53,11 +55,26 @@ class Parser:
         try:
             if self.match(TokenTypes.VAR):
                 return self.varDeclare()
+            elif self.match(TokenTypes.FUN):
+                return self.functionDeclare("function")
             return self.statement()
         except ParseException:
             self.parseError = True
             return self.synchronize()
-
+        
+    def functionDeclare(self, msg):
+        name = self.consume(TokenTypes.IDENTIFIER, f"Expect {msg} name.")
+        self.consume(TokenTypes.LEFT_PAREN, f"Expect '(' after {msg} name.")
+        params = []
+        while not self.check(TokenTypes.RIGHT_PAREN):
+            params.append(self.consume(TokenTypes.IDENTIFIER, "Expect parameter name."))
+            self.match(TokenTypes.COMMA)
+        self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after parameters.")
+        
+        self.consume(TokenTypes.LEFT_BRACE, "Expect '{' before " + msg + " body")
+        body = self.block()
+        return Function(name, params, body)
+            
     def varDeclare(self):
         name = self.consume(TokenTypes.IDENTIFIER, "Expect variable name.")
         initializer = None
@@ -96,7 +113,17 @@ class Parser:
             return self.whileStatement()
         elif self.match(TokenTypes.FOR):
             return self.forStatement()
+        elif self.match(TokenTypes.RETURN):
+            return self.returnStatement()
         return self.expressionStatement()
+    
+    def returnStatement(self):
+        keyword = self.previous()
+        value = None
+        if not self.check(TokenTypes.SEMICOLON):
+            value = self.expression()
+        self.consume(TokenTypes.SEMICOLON, "Expect ; after return value.")
+        return Return(keyword, value)
     
     def forStatement(self):
         self.consume(TokenTypes.LEFT_PAREN, "Expect '(' after for");

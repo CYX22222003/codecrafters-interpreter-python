@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Callable
 from app.environment.environment import Environment
-from app.exception.exceptions import LoxRuntimeException
+from app.exception.exceptions import LoxRuntimeException, ReturnException
 from app.lexer.token import Token
 from app.interpreter.utils import getBinaryOp, getUnaryOp, isTruthy
 from app.interpreter.formatter import evaluateFormat
@@ -27,25 +27,59 @@ class Expression(Statement):
         out += ")"
         return out
 
+
 class While(Statement):
     def __init__(self, condition: Expression, body: Statement):
         self.condition = condition
         self.body = body
-    
+
     def evaluateExpression(self, env=None):
         out = None
         while isTruthy(self.condition.evaluateExpression(env)):
             out = self.body.evaluateExpression(env)
         return out
 
-# No need. Will use syntatic sugar to rewrite for loop into while loop
-# class For(Statement):
-#    def __init__(self, initializer : Statement, cond: Expression, increment: Expression):
-#        self.initializer = initializer
-#        self.cond = cond
-#         self.increment = self.increment            
 
+class Function(Statement):
+    def __init__(self, name: Token, params: list[Token], body: list[Statement]):
+        self.name = name
+        self.params = params
+        self.body = body 
+    
+    def evaluateExpression(self, env=None):
+        def f(*args):
+            curEnv = Environment()
+            curEnv.extend(env)
+            
+            # print("current environment of function executed: " + str(curEnv))
 
+            for i in range(len(args)):
+                curEnv.put(self.params[i].lexeme, args[i])
+            # print("Environment diagram: ", curEnv.values)
+            
+            for b in self.body:
+                try:
+                    out = b.evaluateExpression(curEnv)
+                except ReturnException as r:
+                    curEnv = None
+                    return r.value
+            curEnv = None
+            return out
+        
+        env.put(self.name.lexeme, f)
+        return
+        
+class Return(Statement):
+    def __init__(self, keyword: Token, value: Expression):        
+        self.keyword = keyword
+        self.value = value
+        
+    def evaluateExpression(self, env=None):
+        out = self.value.evaluateExpression(env)
+        raise ReturnException(out)
+        
+        
+        
 class If(Statement):
     def __init__(
         self, condition: Expression, thenBranch: Statement, elseBranch: Statement
@@ -53,7 +87,7 @@ class If(Statement):
         self.condition = condition
         self.thenBranch = thenBranch
         self.elseBranch = elseBranch
-        
+
     def evaluateExpression(self, env):
         if self.condition.evaluateExpression(env):
             return self.thenBranch.evaluateExpression(env)
@@ -93,17 +127,17 @@ class PrintExpression(Statement):
     def evaluateExpression(self, env):
         print(evaluateFormat(self.expr.evaluateExpression(env)))
         return
-    
-    
+
+
 class Logical(Expression):
-    def __init__(self, left : Expression, operator: Token, right: Expression):
+    def __init__(self, left: Expression, operator: Token, right: Expression):
         self.left = left
         self.operator = operator
         self.right = right
-        
+
     def printExpression(self):
-        return super().printExpression();
-    
+        return super().printExpression()
+
     def evaluateExpression(self, env=None):
         leftCond = self.left.evaluateExpression(env)
         if self.operator.type == TokenTypes.OR:
@@ -213,26 +247,29 @@ class Empty(Expression):
     def evaluateExpression(self, env):
         return super().evaluateExpression(env)
 
+
 class Call(Expression):
     def __init__(self, callee: Expression, paren: Token, arguments: list[Expression]):
         self.callee = callee
         self.paren = paren
         self.arguments = arguments
-    
+
     def printExpression(self):
         return super().printExpression()
-    
+
     def evaluateExpression(self, env=None):
         f = self.callee.evaluateExpression(env)
-        arguments  = []
+        arguments = []
         for expr in self.arguments:
             arguments.append(expr.evaluateExpression(env))
         if not callable(f):
-            raise LoxRuntimeException(self.paren, f"Can only call functions and classes. Received type {type(f)}")
-        
+            raise LoxRuntimeException(
+                self.paren,
+                f"Can only call functions and classes. Received type {type(f)}",
+            )
+
         try:
             out = f(*arguments)
         except TypeError as e:
             raise LoxRuntimeException(self.paren, str(e))
-        
         return out

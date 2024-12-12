@@ -9,3 +9,7 @@ class LoxRuntimeException(Exception):
         
     def __str__(self):
         return self.message
+    
+class ReturnException(Exception):
+    def __init__(self, value):
+        self.value = value

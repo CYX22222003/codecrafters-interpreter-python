@@ -9,6 +9,7 @@ def scan(file_contents):
 
 
 def main():
+    sys.setrecursionlimit(1000000000)
     if len(sys.argv) < 3:
         print("Usage: ./your_program.sh tokenize <filename>", file=sys.stderr)
         exit(1)
