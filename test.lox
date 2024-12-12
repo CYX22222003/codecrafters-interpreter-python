@@ -48,6 +48,14 @@ for (var c = 0; c < 10; c = c + 2) {
     print c + 1;
 }
 
-print clock(1);
+print clock();
 
-a(2);
+var k = scanin("key in value of k: ");
+var m = scanin("value of m: ");
+print k + m;
+print(toint(k) + toint(m));
+var xs = makeList(1,4,5,6,7,6,7,8,10);
+print "";
+for (var i = 0; i < xsLength(xs); i = i + 1) {
+    print indexAt(xs, i) + 1;
+}
