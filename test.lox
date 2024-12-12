@@ -55,13 +55,8 @@ fun fib(n) {
     }
 }
 
-print "iter outcome";
-var a = toint(scanin("value of a: "));
-print iter(a);
-print toint(a * (a + 1) / 2);
+fun f() {
+    
+}
 
-print "factorial outcome";
-print factorial(a);
-
-print "fibonacci outcome";
-print fib(a);
+f();

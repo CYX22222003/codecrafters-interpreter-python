@@ -56,7 +56,7 @@ class Function(Statement):
             for i in range(len(args)):
                 curEnv.put(self.params[i].lexeme, args[i])
             # print("Environment diagram: ", curEnv.values)
-            
+            out = None
             for b in self.body:
                 try:
                     out = b.evaluateExpression(curEnv)
