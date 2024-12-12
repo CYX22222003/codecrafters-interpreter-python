@@ -56,7 +56,9 @@ fun fib(n) {
 }
 
 fun f() {
-    
+
 }
 
 f();
+
+print f;
