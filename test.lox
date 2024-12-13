@@ -39,13 +39,26 @@ for (var i = 0; i < 10; i = i + 1) {
 }
 
 
-var repeat = lambda (f, n) {
-  if (n == 1) {
-    return lambda (a) : f(a);
-  }
-  return lambda (a) : repeat(f, n - 1)(f(a));
-};
+var repeat = lambda (f, n) : 
+  n == 1 
+  ? lambda (a) : f(a)
+  : lambda (a) : repeat(f, n - 1)(f(a));
 
 var addOne = (lambda (a) : a + 1);
+print repeat(addOne, 1023)(1);
 
-print repeat(addOne, 3)(1);
+var fib = lambda (n):
+  n == 1 or n == 0
+  ? 1 
+  : fib(n - 1) + fib(n - 2);
+
+var recur = lambda (n):
+  n == 0
+  ? 1
+  : n * recur(n - 1);
+
+
+for (var k = 0; k < 100; k = k + 1) {
+  //print fib(k);
+  print recur(k);
+}

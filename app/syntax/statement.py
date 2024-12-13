@@ -311,3 +311,18 @@ class Call(Expression):
         except TypeError as e:
             raise LoxRuntimeException(self.paren, str(e))
         return out
+    
+class ConditionalExpr(Expression):
+    def __init__(self, condition: Expression, conseq: Expression, alt: Expression):
+        self.cond = condition 
+        self.conseq = conseq 
+        self.alt = alt 
+        
+    def evaluateExpression(self, env=None):
+        if isTruthy(self.cond.evaluateExpression(env)):
+            return self.conseq.evaluateExpression(env)
+        else:
+            return self.alt.evaluateExpression(env)
+    
+    def printExpression(self):
+        return super().printExpression();

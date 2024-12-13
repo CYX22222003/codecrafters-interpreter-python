@@ -5,6 +5,7 @@ from app.lexer.token_types import TokenTypes
 from app.syntax.statement import (
     Assign,
     Call,
+    ConditionalExpr,
     Empty,
     Function,
     If,
@@ -193,7 +194,7 @@ class Parser:
         return self.assignment()
 
     def assignment(self):
-        expr = self.orOperation()
+        expr = self.condExpr()
 
         if self.match(TokenTypes.EQUAL):
             equals = self.previous()
@@ -204,6 +205,16 @@ class Parser:
             else:
                 self.error(equals, "Invalid assignment target")
         return expr
+    
+    def condExpr(self):
+        condition = self.orOperation()
+        if self.check(TokenTypes.QUESTION):
+            self.advance()
+            conseq = self.condExpr()
+            self.consume(TokenTypes.COLON, "Expect ';' after consequential")
+            alt = self.condExpr()
+            return ConditionalExpr(condition, conseq, alt)
+        return condition
 
     def orOperation(self):
         expr = self.andOperation()
@@ -324,7 +335,7 @@ class Parser:
         else:
             raise self.error(self.peek(), "Expect expression.")
 
-    def consume(self, token: Token, msg: str):
+    def consume(self, token: TokenTypes, msg: str):
         if self.check(token):
             return self.advance()
         else:

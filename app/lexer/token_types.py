@@ -21,6 +21,7 @@ class TokenTypes(Enum):
     GREATER=">"
     SLASH="/"
     COLON=":"
+    QUESTION="?"
     STRING="STRING"
     NUMBER="NUMBER"
     IDENTIFIER="IDENTIFIER"
