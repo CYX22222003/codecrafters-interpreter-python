@@ -308,7 +308,7 @@ class Call(Expression):
 
         try:
             out = f(*arguments)
-        except TypeError as e:
+        except Exception as e:
             raise LoxRuntimeException(self.paren, str(e))
         return out
     

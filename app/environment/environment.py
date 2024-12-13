@@ -1,7 +1,5 @@
-from app.environment.predefined import indexAt, makeList, scanin, toint, tostr, xsLength
 from app.exception.exceptions import LoxRuntimeException
 from app.lexer.token import Token
-import time
 
 
 class Environment:
@@ -36,18 +34,6 @@ class Environment:
         self.enclosing = new_enclosse
         new_enclosse.children.append(self)
 
-
-class Global(Environment):
-    def __init__(self):
-        self.values = {
-            "clock": lambda: time.time(),
-            "scanin": scanin,
-            "toint": toint,
-            "tostr": tostr,
-            "makeList": makeList,
-            "indexAt": indexAt,
-            "xsLength": xsLength,
-        }
+    def initializeTable(self, tab):
+        self.values = tab
         self.hashSet = set(self.values.keys())
-        self.enclosing = None
-        self.children = []

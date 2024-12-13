@@ -57,8 +57,22 @@ var recur = lambda (n):
   ? 1
   : n * recur(n - 1);
 
-
-for (var k = 0; k < 100; k = k + 1) {
+var upper = toint(scanin("Key in value of upper: "));
+for (var k = 0; k < upper; k = k + 1) {
   //print fib(k);
   print recur(k);
 }
+
+var y = list(1,2,3,4,5,6,7,8);
+
+for (var j = 1; j < length(y); j = j + 1) {
+  updateAt(y, j, indexAt(y, j) + 1);
+}
+
+print y;
+
+for (var j = 1; j < 10; j = j + 1) {
+  append(y, fib(j));
+}
+
+print y;
