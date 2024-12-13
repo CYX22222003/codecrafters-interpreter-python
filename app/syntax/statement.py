@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from typing import Callable
+from typing import Iterable
 from app.environment.environment import Environment
 from app.exception.exceptions import LoxRuntimeException, ReturnException
 from app.lexer.token import Token
@@ -50,7 +50,7 @@ class Function(Statement):
             curEnv = Environment()
             curEnv.extend(env)
             if len(args) != len(self.params):
-                raise LoxRuntimeException(self.name, "Wrong number of parameters")
+                raise TypeError("Wrong number of parameters")
             
             for i in range(len(args)):
                 curEnv.put(self.params[i].lexeme, args[i])
@@ -69,6 +69,42 @@ class Function(Statement):
         env.put(self.name.lexeme, f)
         f.__name__ = self.name.lexeme
         return
+
+class LambdaExpr(Expression):
+    def __init__(self, params: list[Token], body: list[Statement]):
+        self.params = params
+        self.body = body
+        
+    def printExpression(self):
+        return Expression.parathesis("lambda", self.parathesis(self.params))
+    
+    def evaluateExpression(self, env=None):
+        def f(*args):
+            curEnv = Environment()
+            curEnv.extend(env)
+            if len(args) != len(self.params):
+                raise TypeError("Wrong number of parameters")
+            
+            for i in range(len(args)):
+                curEnv.put(self.params[i].lexeme, args[i])
+
+            out = Empty()
+            bodyEnv = Environment()
+            bodyEnv.extend(curEnv)
+            
+            if type(self.body) is not list:
+                out = self.body.evaluateExpression(bodyEnv)
+                return out
+            
+            try:
+                for b in self.body:
+                    out = b.evaluateExpression(bodyEnv)
+            except ReturnException as r:
+                out = r.value.evaluateExpression(bodyEnv)
+            return out
+        return f
+    
+    
         
 class Return(Statement):
     def __init__(self, keyword: Token, value: Expression):        

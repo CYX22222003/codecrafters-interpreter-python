@@ -8,6 +8,7 @@ from app.syntax.statement import (
     Empty,
     Function,
     If,
+    LambdaExpr,
     Literal,
     Binary,
     Expression,
@@ -284,6 +285,23 @@ class Parser:
                 break
         paren = self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after arguments.")
         return Call(callee, paren, arguments)
+    
+    def lambdaExpr(self):
+        self.consume(TokenTypes.LEFT_PAREN, "Expect ')' after lambda")
+        params = []
+        if not self.check(TokenTypes.RIGHT_PAREN):
+            while True:
+                params.append(self.consume(TokenTypes.IDENTIFIER, "Expect parameter name."))
+                if not self.match(TokenTypes.COMMA):
+                    break
+        self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after parameters.")
+        if self.check(TokenTypes.LEFT_BRACE):
+            self.advance()
+            body = self.block()
+        elif self.check(TokenTypes.COLON):
+            self.advance()
+            body = self.expression()
+        return LambdaExpr(params, body)
             
     def primary(self) -> Expression:
         if self.match(TokenTypes.FALSE):
@@ -301,6 +319,8 @@ class Parser:
             expr = self.expression()
             self.consume(TokenTypes.RIGHT_PAREN, "Expect ')' after expression.")
             return Grouping(expr)
+        elif self.match(TokenTypes.LAMBDA):
+            return self.lambdaExpr()
         else:
             raise self.error(self.peek(), "Expect expression.")
 

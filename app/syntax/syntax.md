@@ -31,6 +31,7 @@ printStmt      → "print" expression ";" ;
 expression     → assignment;
 assignment     → IDENTIFIER "=" assignment
                | logical_or;
+
 logical_or     → logic_and ("or" logic_and)*
 logic_and      → equality ("and" equality)* 
 equality       → comparison ( ( "!=" | "==" ) comparison )* ;
@@ -38,7 +39,9 @@ comparison     → term ( ( ">" | ">=" | "<" | "<=" ) term )* ;
 term           → factor ( ( "-" | "+" ) factor )* ;
 factor         → unary ( ( "/" | "*" ) unary )* ;
 unary          → ( "!" | "-" ) unary | call ;
+
 call           → primary ("(" arguments? ")")*
 arguments      → expression ( "," expression )*
 primary        → NUMBER | STRING | "true" | "false" | "nil"
-               | "(" expression ")" | IDENTIFIER;
+               | "(" expression ")" | IDENTIFIER | lambdaExpr;
+lambdaExpr     → "lambda" "("parameters?")" (block | : expression);

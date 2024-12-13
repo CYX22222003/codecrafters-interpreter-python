@@ -38,7 +38,7 @@ class Scanner:
 
     def scanToken(self):
         char = self.source[self.pointer]
-        if char in {"(", ")", "{", "}", ",", ".", "-", "+", ";", "*"}:
+        if char in {"(", ")", "{", "}", ",", ".", "-", "+", ";", "*", ":"}:
             self.processNormal(char)
         elif char in {"!", ">", "=", "<"}:
             self.processEquality(char)
@@ -93,6 +93,8 @@ class Scanner:
             token = TokenTypes.SEMICOLON
         elif char == "*":
             token = TokenTypes.STAR
+        elif char == ":":
+            token = TokenTypes.COLON
         self.printAndAddToken(token, char, literal)
 
     def processEquality(self, char):

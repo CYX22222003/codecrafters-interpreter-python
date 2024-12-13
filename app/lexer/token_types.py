@@ -20,6 +20,7 @@ class TokenTypes(Enum):
     GREATER_EQUAL=">="
     GREATER=">"
     SLASH="/"
+    COLON=":"
     STRING="STRING"
     NUMBER="NUMBER"
     IDENTIFIER="IDENTIFIER"
@@ -40,3 +41,4 @@ class TokenTypes(Enum):
     VAR="VAR"
     WHILE="WHILE"
     EOF="EOF"
+    LAMBDA="LAMBDA"

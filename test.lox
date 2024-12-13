@@ -1,7 +1,5 @@
 fun makeFilter(min) {
-    fun filter() {
-        print min;
-    }
+    var filter = lambda () {print(min);};
     return filter;
 }
 
@@ -27,14 +25,27 @@ while (!tick()) {}
 
 fun makeCounter() {
   var i = 0;
-  fun count() {
+  var count = lambda () {
     i = i + 1;
     print i;
-  }
+  };
 
   return count;
 }
 
 var counter = makeCounter();
-counter();
-counter();
+for (var i = 0; i < 10; i = i + 1) {
+  counter();
+}
+
+
+var repeat = lambda (f, n) {
+  if (n == 1) {
+    return lambda (a) : f(a);
+  }
+  return lambda (a) : repeat(f, n - 1)(f(a));
+};
+
+var addOne = (lambda (a) : a + 1);
+
+print repeat(addOne, 3)(1);

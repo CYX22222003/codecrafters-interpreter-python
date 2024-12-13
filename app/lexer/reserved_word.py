@@ -18,6 +18,7 @@ class ReservedWord:
         "true" : TokenTypes.TRUE,
         "var" : TokenTypes.VAR,
         "while" : TokenTypes.WHILE,
+        "lambda" : TokenTypes.LAMBDA
     }
 
     @staticmethod
