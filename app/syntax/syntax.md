@@ -35,6 +35,6 @@ factor         → unary ( ( "/" | "*" ) unary )* ;
 unary          → ( "!" | "-" ) unary | call ;  
 call           → primary ("(" arguments? ")")*;  
 arguments      → expression ( "," expression )*;  
-primary        → NUMBER | STRING | "true" | "false" | "nil";  
-               | "(" expression ")" | IDENTIFIER | lambdaExpr;  
+primary        → NUMBER | STRING | "true" | "false" | "nil" | 
+                    "(" expression ")" | IDENTIFIER | lambdaExpr;  
 lambdaExpr     → "lambda" "("parameters?")" (block | : expression);  
